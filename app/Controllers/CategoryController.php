@@ -10,6 +10,6 @@ class CategoryController extends BaseController
             'title' => 'Categories',
         ];
 
-        return view('pages/dashboard/categories_page', $data);
+        return view('pages/dashboard/categories', $data);
     }
 }
