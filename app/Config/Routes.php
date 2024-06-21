@@ -9,6 +9,7 @@ use App\Controllers\ProductController;
 use App\Controllers\SettingController;
 use App\Controllers\TransactionController;
 use App\Controllers\ReportController;
+use App\Controllers\ReviewController;
 
 /**
  * @var RouteCollection $routes
@@ -26,3 +27,4 @@ $routes->get('/dashboard/categories', [CategoryController::class, 'index']);
 $routes->get('/dashboard/products', [ProductController::class, 'index']);
 $routes->get('/dashboard/transactions', [TransactionController::class, 'index']);
 $routes->get('/dashboard/reports', [ReportController::class, 'index']);
+$routes->get('/dashboard/reviews', [ReviewController::class, 'index']);
