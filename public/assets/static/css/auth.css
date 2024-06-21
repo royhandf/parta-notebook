@@ -1,0 +1,28 @@
+body {
+  height: 100vh;
+  background-color: #fff;
+}
+
+.background-auth {
+  background-image: url(../images/background-abstrack.png);
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-custom-auth {
+  color: #f90a45;
+}
+
+.btn-custom-auth {
+  background-color: #f90a45;
+  color: #fff;
+}
+
+.btn-custom-auth:hover {
+  background-color: #dc0036;
+  color: #fff;
+}

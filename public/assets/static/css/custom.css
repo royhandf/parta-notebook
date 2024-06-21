@@ -1,0 +1,65 @@
+.btn-custom-search {
+  color: #f90a45;
+  border: 1px solid #f90a45;
+}
+
+.btn-custom-search:hover {
+  background-color: #f90a45;
+  color: #fff;
+}
+
+.btn-custom-submit {
+  background-color: #f90a45;
+  color: #fff;
+}
+
+.btn-custom-submit:hover {
+  background-color: #d00236;
+  color: #fff;
+}
+
+.btn-custom-outline-submit {
+  border: 1px solid #f90a45;
+  color: #f90a45;
+}
+
+.btn-custom-outline-submit:hover {
+  background-color: #f90a45;
+  color: #fff;
+}
+
+.text-custom-red {
+  color: #f90a45;
+}
+
+.text-custom-price {
+  font-size: 32px;
+}
+
+.text-custom-total-price {
+  font-size: 20px;
+}
+
+.search-bar {
+  width: 750px;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .search-bar {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .text-custom-price {
+    font-size: 20px;
+  }
+
+  .text-custom-total-price {
+    font-size: 16px;
+  }
+}
