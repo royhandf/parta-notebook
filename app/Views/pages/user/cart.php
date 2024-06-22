@@ -4,7 +4,7 @@
 
 <div class="container my-5">
     <div class="row justify-content-center">
-        <div class="col-11">
+        <div class="col-12">
             <div class="px-md-5 px-4 py-4 bg-white rounded-4 shadow-sm">
                 <h1 class="text-black fw-medium mb-3">Cart</h1>
                 <div class="d-flex gap-2 align-items-center mb-5">
