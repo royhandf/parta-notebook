@@ -28,6 +28,16 @@
   color: #fff;
 }
 
+.btn-custom-cancel {
+  background-color: #fc5a37;
+  color: #fff;
+}
+
+.btn-custom-cancel:hover {
+  background-color: #d54c2d;
+  color: #fff;
+}
+
 .text-custom-red {
   color: #f90a45;
 }

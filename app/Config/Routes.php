@@ -16,11 +16,11 @@ use App\Controllers\ReviewController;
  */
 $routes->get('/', [Home::class, 'index']);
 $routes->get('/login', [AuthController::class, 'index']);
-
 $routes->get('/register', [AuthController::class, 'register']);
 
 $routes->get('/cart', [Home::class, 'cart']);
 $routes->get('/checkout', [Home::class, 'checkout']);
+$routes->get('/payment', [Home::class, 'payment']);
 
 $routes->get('/dashboard', [DashboardController::class, 'index']);
 $routes->get('/dashboard/settings', [SettingController::class, 'index']);
