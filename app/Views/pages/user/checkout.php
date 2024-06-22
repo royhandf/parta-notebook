@@ -5,7 +5,7 @@
 <div class="container my-5">
     <div class="row gy-4 justify-content-center">
         <div class="col-lg-9 col-11">
-            <div class="p-4 bg-white rounded-4">
+            <div class="p-4 bg-white rounded-4 shadow-sm">
                 <h1 class="text-black fw-medium mb-3">Checkout</h1>
                 <div class="d-flex gap-3 align-items-center mb-5">
                     <p class="fw-medium fs-custom-paragraph text-muted mb-0">Cart</p>
@@ -17,22 +17,15 @@
                 <form action="" method="POST">
                     <div class="d-flex flex-column mb-4">
                         <h5 class="fw-medium text-muted mb-3">ADDRESS</h5>
-                        <div class="row align-items-start mb-4">
-                            <div class="col-md-6">
-                                <h5 class="text-black fw-medium">Agus Salam</h5>
-                                <!-- if ada alamat -->
-                                <p class="text-black">Jl. Kebon Jeruk No. 123 RT 01 RW 02, Kec. Bogor Selatan,
-                                    Kota Bogor, Jawa Barat, 16123</p>
-                                <!-- else -->
-                                <!-- <p class="text-black">Address not set</p> -->
+                        <div class="mb-4">
+                            <h5 class="text-black fw-medium">Agus Salam</h5>
+                            <!-- if ada alamat -->
+                            <p class="text-black">Jl. Kebon Jeruk No. 123 RT 01 RW 02, Kec. Bogor Selatan,
+                                Kota Bogor, Jawa Barat, 16123</p>
+                            <!-- else -->
+                            <!-- <p class="text-black">Address not set</p> -->
 
-                                <p class="text-black">081234567890</p>
-                            </div>
-                            <div class="col-md-4">
-                                <p class="fw-semibold text-black mb-2">Note</p>
-                                <input type="text" name="note" id="note"
-                                    class="w-100 rounded-3 form-control border-secondary" placeholder="Tulis pesan...">
-                            </div>
+                            <p class="text-black">081234567890</p>
                         </div>
 
                         <h5 class="fw-medium text-black mb-3">Order Summary</h5>
@@ -58,7 +51,7 @@
             </div>
         </div>
         <div class="col-lg-3 col-11">
-            <div class="p-4 bg-white rounded-4">
+            <div class="p-4 bg-white rounded-4 shadow-sm">
                 <form action="">
                     <div class="input-group mb-3">
                         <label class="input-group-text bg-transparent border-end-0" for="kurir"><i
