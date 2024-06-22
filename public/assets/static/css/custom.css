@@ -32,6 +32,10 @@
   color: #f90a45;
 }
 
+.fs-custom-paragraph {
+  font-size: 16px;
+}
+
 .text-custom-price {
   font-size: 32px;
 }
@@ -61,5 +65,15 @@
 
   .text-custom-total-price {
     font-size: 16px;
+  }
+
+  .fs-custom-paragraph {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 375px) {
+  .text-custom-total-price {
+    font-size: 14px;
   }
 }

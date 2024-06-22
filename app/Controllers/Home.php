@@ -6,6 +6,28 @@ class Home extends BaseController
 {
     public function index(): string
     {
-        return view('welcome_message');
+        $data = [
+            'title' => 'Homepage',
+        ];
+
+        return view('pages/user/home', $data);
+    }
+
+    public function cart(): string
+    {
+        $data = [
+            'title' => 'Cart',
+        ];
+
+        return view('pages/user/cart', $data);
+    }
+
+    public function checkout(): string
+    {
+        $data = [
+            'title' => 'Checkout',
+        ];
+
+        return view('pages/user/checkout', $data);
     }
 }
