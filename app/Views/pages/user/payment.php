@@ -103,11 +103,11 @@
                 </div>
                 <h5 class="fw-medium text-black mb-4">Bank Mandiri</h5>
                 <div>
-                    <h5 class="fw-medium text-black">Rekening Bank</h5>
+                    <h5 class="fw-medium text-black">Account Number</h5>
                     <p class="text-black fw-regular">2208 1999 1234 5678</p>
                 </div>
                 <div>
-                    <h5 class="fw-medium text-black">Atas Nama</h5>
+                    <h5 class="fw-medium text-black">Account Name</h5>
                     <p class="text-black fw-regular">PT. Parta Notebook</p>
                 </div>
                 <a href="" class="btn btn-custom-outline-submit d-block mt-4">
