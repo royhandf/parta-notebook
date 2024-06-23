@@ -14,10 +14,10 @@
                     <a class="nav-link" href="/cart">Cart</i></a>
                 </li>
                 <li class="nav-item me-2">
-                    <a class="nav-link" href="/profile">Profile</a>
+                    <a class="nav-link" href="/account">Profile</a>
                 </li>
                 <li class="nav-item me-2">
-                    <a class="nav-link" href="/rating">Ratings & Feedback</a>
+                    <a class="nav-link" href="/feedback">Ratings & Feedback</a>
                 </li>
                 <li class="nav-item me-2">
                     <a class="nav-link" href="/logout">Logout</a>
@@ -49,7 +49,7 @@
                             </a>
                         </li>
                         <li class="mb-2">
-                            <a class="dropdown-item" href="/account">
+                            <a class="dropdown-item" href="/feedback">
                                 <i class="fa-regular fa-star me-1"></i> Ratings & Feedback
                             </a>
                         </li>
