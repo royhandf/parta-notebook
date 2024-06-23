@@ -18,8 +18,6 @@
     <link rel="stylesheet"
         href="<?= base_url('assets/extensions/datatables.net-bs5/css/responsive.bootstrap5.min.css') ?>" />
 
-    <link rel="stylesheet" href="<?= base_url('assets/extensions/choices.js/public/assets/styles/choices.min.css') ?>">
-
     <link rel="stylesheet" href="<?= base_url('assets/extensions/summernote/summernote-lite.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/compiled/css/form-editor-summernote.css') ?>">
 
@@ -77,15 +75,9 @@
 
     <script src="<?= base_url('assets/static/js/pages/datatables.js') ?>"></script>
 
-    <!-- Choices -->
-    <script src="<?= base_url('assets/extensions/choices.js/public/assets/scripts/choices.min.js') ?>"></script>
-    <script src="<?= base_url('assets/static/js/pages/choices.js') ?>"></script>
-
     <!-- Datepicker -->
     <script src="<?= base_url('assets/extensions/moment/moment.min.js') ?>"></script>
     <script src="<?= base_url('assets/extensions/daterangepicker/daterangepicker.js') ?>"></script>
-
-    <script src="<?= base_url('assets/extensions/lightbox-bs5/lightbox.js') ?>"></script>
 </body>
 
 </html>
