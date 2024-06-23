@@ -21,6 +21,10 @@ $routes->get('/register', [AuthController::class, 'register']);
 $routes->get('/cart', [Home::class, 'cart']);
 $routes->get('/checkout', [Home::class, 'checkout']);
 $routes->get('/payment', [Home::class, 'payment']);
+$routes->get('/account', [Home::class, 'account']);
+$routes->get('/feedback', [Home::class, 'feedback']);
+$routes->get('/detail-transaction', [Home::class, 'detailTransaction']);
+
 
 $routes->get('/dashboard', [DashboardController::class, 'index']);
 $routes->get('/dashboard/settings', [SettingController::class, 'index']);

@@ -62,6 +62,31 @@
   display: none;
 }
 
+.rating {
+  direction: rtl;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+}
+.rating input {
+  display: none;
+}
+.rating label {
+  cursor: pointer;
+}
+.rating label:before {
+  content: "\f005";
+  font-family: "FontAwesome";
+  margin: 0 5px;
+  color: #ccc;
+}
+.rating input:checked ~ label:before,
+.rating label:hover ~ label:before,
+.rating input:checked ~ label:hover:before,
+.rating label:hover:before {
+  color: #ffca08;
+}
+
 @media (max-width: 768px) {
   .search-bar {
     width: 100%;
