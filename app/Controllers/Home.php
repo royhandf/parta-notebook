@@ -13,6 +13,24 @@ class Home extends BaseController
         return view('pages/user/home', $data);
     }
 
+    public function products(): string
+    {
+        $data = [
+            'title' => 'Products',
+        ];
+
+        return view('pages/user/products', $data);
+    }
+
+    public function detailProduct(): string
+    {
+        $data = [
+            'title' => 'Detail Product',
+        ];
+
+        return view('pages/user/detail-product', $data);
+    }
+
     public function cart(): string
     {
         $data = [
@@ -38,5 +56,32 @@ class Home extends BaseController
         ];
 
         return view('pages/user/payment', $data);
+    }
+
+    public function account(): string
+    {
+        $data = [
+            'title' => 'Account',
+        ];
+
+        return view('pages/user/account', $data);
+    }
+
+    public function feedback(): string
+    {
+        $data = [
+            'title' => 'Feedback',
+        ];
+
+        return view('pages/user/feedback', $data);
+    }
+
+    public function detailTransaction(): string
+    {
+        $data = [
+            'title' => 'Detail Transaction',
+        ];
+
+        return view('pages/user/detail-transaction', $data);
     }
 }

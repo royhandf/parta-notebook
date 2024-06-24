@@ -24,6 +24,7 @@
                 </li>
             </ul>
 
+            <!-- PENCARIAN PRODUK DAN AKAN PINDAH KE HALAMAN GALLERY PRODUCTS -->
             <form class="d-md-flex d-block mx-auto mt-md-0 mt-3" role="search" action="">
                 <div class="input-group search-bar">
                     <input type="text" class="form-control" placeholder="Search for products"
