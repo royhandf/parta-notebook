@@ -37,7 +37,7 @@
                                             <?= substr("Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam laborum, omnis saepe pariatur culpa nisi temporibus dolorem atque expedita rerum perspiciatis vero modi aperiam est iusto at non impedit amet.", 0, 100) . '...' ?>
                                         </p>
                                     </div>
-                                    <span class="text-custom-red fw-medium text-custom-price mb-2">
+                                    <span class="text-custom-red fw-medium text-custom-heading mb-2">
                                         Rp. <?= number_format(10000000, 0, ',', '.') ?>
                                     </span>
                                 </div>
