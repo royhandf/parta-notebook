@@ -49,13 +49,17 @@
                                 <td><?= $review->nama_lengkap ?></td>
                                 <td>
                                     <div class="d-flex gap-1 mb-1">
-                                        <?php for ($i = 0; $i < $review->rating; $i++) { ?>
-                                            <i class="fa fa-star text-warning"></i>
-                                        <?php } ?>
+                                    <?php foreach (range(1, 5) as $number) : ?>
+                                <?php if ($review == null) : ?>
+                                    <i class="fa fa-star text-muted"></i>
+                                <?php else : ?>
+                                    <i class="fa fa-star <?= $number <= $review->star ? 'text-warning' : 'text-muted' ?>"></i>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
                                     </div>
                                     <div><?= $review->description ?></div>
                                 </td>
-                                <td><?= $review->updated_at ?></td>
+                                <td><?= $review->created_at ?></td>
                             </tr>
                         <?php } ?>
                         </tbody>

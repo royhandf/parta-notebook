@@ -22,7 +22,8 @@ class ReviewMigration extends Migration
                 'constraint' => 32
             ],
             'star' => [
-                'type' => 'INT'
+                'type' => 'INT',
+                'default' => 0
             ],
             'description' => [
                 'type' => 'TEXT'

@@ -47,25 +47,31 @@ class DashboardController extends BaseController
             ->limit(5)
             ->findAll();
 
-        $salesPerMonth = $this->detailTransactions->select('MONTH(transactions.created_at) as month, YEAR(transactions.created_at) as year, SUM(detailtransactions.qty) as total_qty')
+            $salesPerMonth = $this->detailTransactions->select('MONTH(transactions.created_at) as month, YEAR(transactions.created_at) as year, SUM(detailtransactions.qty) as total_qty, products.harga')
             ->join('transactions', 'transactions.id = detailtransactions.transaction_id')
+            ->join('products', 'products.id = detailtransactions.product_id')
             ->where('transactions.status', 'success')
-            ->groupBy('month, year')
+            ->groupBy('month, year, products.harga')
             ->orderBy('year', 'ASC')
             ->orderBy('month', 'ASC')
             ->findAll();
+    
+        $totalrevenue = 0;
+        foreach ($salesPerMonth as $sale) {
+            $totalrevenue += $sale->total_qty * $sale->harga;
+        }
 
         $data = [
-            'user' => session()->get('nama_lengkap'),
             'role' => session()->get('role'),
             'title' => 'Dashboard',
             'total_categories' => $this->categories->countAll(),
             'total_products' => $this->products->countAll(),
             'total_transactions' => $this->transactions->where('status', 'success')->countAllResults(),
-            'total_users' => $this->users->where('role !=', 'Admin')->where('role !=', 'Owner')->countAllResults(),
+            'total_users' => $this->users->where('role !=', 'Admin')->countAllResults(),
             'transactions' => $transactions,
             'sales_per_month' => $salesPerMonth,
             'top_sales' => $topSales,
+            'total_revenue' => $totalrevenue,
         ];
 
         return view('pages/dashboard/index', $data);

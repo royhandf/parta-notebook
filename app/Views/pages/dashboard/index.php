@@ -14,7 +14,7 @@
                     <div class="row align-items-end">
                         <div class="col-12">
                             <p class="fw-medium text-black">Top Revenue</p>
-                            <h5 class="fw-semibold">Rp. <?= number_format(100000000, 0, ',', '.') ?></h5>
+                            <h5 class="fw-semibold">Rp. <?= number_format($total_revenue, 0, ',', '.') ?></h5>
                         </div>
                         <div class="col-12 text-end">
                             <img src="<?= base_url('assets/static/images/purple-line.png') ?>" alt="line">
@@ -29,7 +29,7 @@
                     <div class="row align-items-end">
                         <div class="col-12">
                             <p class="fw-medium text-black">Total Customers</p>
-                            <h5 class="fw-semibold">100</h5>
+                            <h5 class="fw-semibold"><?= $total_users ?></h5>
                         </div>
                         <div class="col-12 text-end">
                             <img src="<?= base_url('assets/static/images/red-line.png') ?>" alt="line">
@@ -44,7 +44,7 @@
                     <div class="row align-items-end">
                         <div class="col-12">
                             <p class="fw-medium text-black">Total Orders</p>
-                            <h5 class="fw-semibold">55</h5>
+                            <h5 class="fw-semibold"><?= $total_transactions ?></h5>
                         </div>
                         <div class="col-12 text-end">
                             <img src="<?= base_url('assets/static/images/green-line.png') ?>" alt="line">
@@ -95,36 +95,25 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>INV/20210801/1</td>
-                                    <td>John Doe</td>
-                                    <td>2021-08-01</td>
-                                    <td>Rp. <?= number_format(1000000, 0, ',', '.') ?></td>
-                                    <td>
-                                        <span class="badge bg-warning">Pending</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>INV/20210801/2</td>
-                                    <td>Jane Doe</td>
-                                    <td>2021-08-01</td>
-                                    <td>Rp. <?= number_format(2000000, 0, ',', '.') ?></td>
-                                    <td>
-                                        <span class="badge bg-success">Success</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>INV/20210801/3</td>
-                                    <td>John Doe</td>
-                                    <td>2021-08-01</td>
-                                    <td>Rp. <?= number_format(3000000, 0, ',', '.') ?></td>
-                                    <td>
-                                        <span class="badge bg-danger">Canceled</span>
-                                    </td>
-                                </tr>
+                            <?php $no = 1; ?>
+                                <?php foreach ($transactions as $key => $transaction) : ?>
+                                    <tr>
+                                        <td> <?= $no++ ?> </td>
+                                        <td><?= $transaction->kode_transaksi ?></td>
+                                        <td><?= $transaction->nama_lengkap ?></td>
+                                        <td><?= $transaction->created_at ?></td>
+                                        <td>Rp. <?= number_format($transaction->total_bayar, 0, ',', '.') ?></td>
+                                        <td>
+                                            <?php if ($transaction->status == 'pending') : ?>
+                                                <span class="badge bg-warning">Pending</span>
+                                            <?php elseif ($transaction->status == 'canceled') : ?>
+                                                <span class="badge bg-danger">Canceled</span>
+                                            <?php elseif ($transaction->status == 'success') : ?>
+                                                <span class="badge bg-success">Success</span>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>

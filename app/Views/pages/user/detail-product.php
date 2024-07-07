@@ -12,16 +12,16 @@
                 <div class="mt-2 mb-4">
                     <div class="swiper mySwiper2">
                         <div class="swiper-wrapper">
-                        <?php foreach ($productimages as $productimage) : ?>
-                            <img src="<?= $productimage != null ? base_url('uploads/img-product/' . $productimage[0]->image) : base_url('assets/static/images/product.png') ?>" class="card-img-top img-fluid" alt="product" />
+                        <?php foreach ($products as $product) : ?>
+                            <img src="<?= $product->images != null ? base_url('uploads/img-product/' . $product->images[0]->image) : base_url('assets/static/images/product.png') ?>" class="card-img-top img-fluid" alt="product" />
                         <?php endforeach; ?>
                         </div>
                     </div>
 
                     <div thumbsSlider="" class="swiper mySwiper">
                         <div class="swiper-wrapper">
-                        <?php foreach ($productimages as $productimage) : ?>
-                            <img src="<?= $productimage != null ? base_url('uploads/img-product/' . $productimage[0]->image) : base_url('assets/static/images/product.png') ?>" class="card-img-top img-fluid" alt="product" />
+                        <?php foreach ($products as $product) : ?>
+                            <img src="<?= $product->images != null ? base_url('uploads/img-product/' . $product->images[0]->image) : base_url('assets/static/images/product.png') ?>" class="card-img-top img-fluid" alt="product" />
                         <?php endforeach; ?>
                         </div>
                     </div>

@@ -96,9 +96,11 @@ class Home extends BaseController
             ->where('products.id', $id)
             ->first();
 
-        $productimages = $this->productImages->select('image')
-            ->where('product_id', $id)
-            ->findAll();
+        foreach ($detail as $key => $product) {
+            $detail->images = $this->productImages->select('image')
+                ->where('product_id', $id)
+                ->findAll();
+        }
         
         // same category products
         $relatedProducts = $this->products->select('products.*')
@@ -127,7 +129,6 @@ class Home extends BaseController
             'role' => session()->get('role'),
             'product' => $detail,
             'relatedproducts' => $relatedProducts,
-            'productimages' => $productimages,
             'products' => $products,
             'title' => 'Detail Product',
         ];
@@ -425,32 +426,109 @@ class Home extends BaseController
     public function feedback()
     {
         $userid = session()->get('id');
-        $transactions = $this->transactions->where('user_id', $userid)->findAll();
+        $number = 5;
 
-        //join detail transactions, products, transaction, reviews
+        $transactions = $this->transactions->where('user_id', $userid)->findAll();
+        $details = [];
         foreach ($transactions as $transaction) {
-            $transaction->details = $this->detailTransactions->where('transaction_id', $transaction->id)->findAll();
-            foreach ($transaction->details as $detail) {
-                $detail->product = $this->products->find($detail->product_id);
-                $detail->review = $this->reviews->where('product_id', $detail->product_id)->first();
+            $detail = $this->detailTransactions->where('transaction_id', $transaction->id)->findAll();
+            foreach ($detail as $item) {
+                $item->transactions = $transaction;
+                $item->products = $this->products->find($item->product_id);
+                $item->reviews = $this->reviews->where('user_id', $userid)->where('product_id', $item->product_id)->first();
+                $item->images = $this->productImages->select('image')->where('product_id', $item->product_id)->first();
+                $details[] = $item;
             }
         }
-        dd($transactions);
+
+        // dd($details);
 
         $data = [
             'role' => session()->get('role'),
             'title' => 'Feedback',
-            'transactions' => $transactions,
+            'details' => $details,
+            'numbers' => $number,
         ];
 
         return view('pages/user/feedback', $data);
     }
 
-    public function detailTransaction(): string
+    public function storeFeedback()
     {
+        $userid = session()->get('id');
+        $productid = $this->request->getPost('product_id');
+        $star = $this->request->getPost('rating');
+
+        // check if user already give feedback it can update
+        $review = $this->reviews->where('user_id', $userid)->where('product_id', $productid)->first();
+        if ($review) {
+            $this->reviews->update($review->id, [
+                'star' => $star,
+                'description' => $this->request->getPost('review'),
+            ]);
+
+            $totalRating = $this->reviews->select('star')->where('product_id', $productid)->findAll();
+            $total = 0;
+            foreach ($totalRating as $rate) {
+                $total += $rate->star;
+            }
+
+            $rating = $total / count($totalRating);
+
+            $this->products->update($productid, [
+                'rating' => $rating,
+            ]);
+
+            session()->setFlashdata('success', 'Feedback has been updated!');
+            return redirect()->to('/feedback');
+        }
+        
+        $this->reviews->insert([
+            'id' => Uuid::uuid4(),
+            'user_id' => $userid,
+            'product_id' => $productid,
+            'star' => $star,
+            'description' => $this->request->getPost('review'),
+        ]);
+
+        $totalRating = $this->reviews->select('star')->where('product_id', $productid)->findAll();
+        $total = 0;
+        foreach ($totalRating as $rate) {
+            $total += $rate->star;
+        }
+
+        $rating = $total / count($totalRating);
+
+        $this->products->update($productid, [
+            'rating' => $rating,
+        ]);
+
+        session()->setFlashdata('success', 'Feedback has been sent!');
+        return redirect()->to('/feedback');
+    }
+
+    public function detailTransaction($id)
+    {
+        $userId = session()->get('id');
+        $user = $this->userModel->where('id', $userId)->first();
+        $admin = $this->userModel->where('role', 'admin')->first();
+        $transaction = $this->transactions->find($id);
+        $details = $this->detailTransactions->where('transaction_id', $id)->findAll();
+
+        foreach ($details as $detail) {
+            $detail->product = $this->products->find($detail->product_id);
+        }
+
+        $ongkir = 20000;
+
         $data = [
             'role' => session()->get('role'),
             'title' => 'Detail Transaction',
+            'transaction' => $transaction,
+            'details' => $details,
+            'admin' => $admin,
+            'user' => $user,
+            'ongkir' => $ongkir,
         ];
 
         return view('pages/user/detail-transaction', $data);

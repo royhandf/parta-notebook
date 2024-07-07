@@ -49,7 +49,8 @@ $routes->group('/', ['filter' => 'customer'], function ($routes) {
     $routes->get('verify-payment', [Home::class, 'verifyWhatsapp']);
     $routes->post('cancel-payment/(:segment)', [Home::class, 'cancelPayment']);
     $routes->get('feedback', [Home::class, 'feedback']);
-    $routes->get('detail-transaction/(:segment)', [Home::class, 'detailTransactions']);
+    $routes->post('feedback', [Home::class, 'storeFeedback']);
+    $routes->get('detail-transaction/(:segment)', [Home::class, 'detailTransaction']);
 });
 
 $routes->get('/dashboard', [DashboardController::class, 'index'], ['filter' => 'admin']);

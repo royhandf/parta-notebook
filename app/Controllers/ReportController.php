@@ -59,7 +59,6 @@ class ReportController extends BaseController
         }
         
         $data = [
-            'user' => session()->get('nama_lengkap'),
             'role' => session()->get('role'),
             'transactions' => $transactions,
             'title' => 'Reports',
