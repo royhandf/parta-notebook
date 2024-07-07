@@ -6,41 +6,23 @@
     <div class="row gy-4 justify-content-center mb-4">
         <div class="col-md-9 col-11">
             <div class="p-4 bg-white rounded-4 shadow-sm">
-                <h2 class="text-black fw-semibold mb-3">Macbook Pro 2021</h2>
+                <h2 class="text-black fw-semibold mb-3"><?= $product->nama_produk ?></h2>
 
                 <!-- image -->
                 <div class="mt-2 mb-4">
                     <div class="swiper mySwiper2">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide"><img src="<?= base_url('assets/static/images/macbook.png') ?>"
-                                    alt=""></div>
-                            <div class="swiper-slide"><img src="<?= base_url('assets/static/images/macbook.png') ?>"
-                                    alt=""></div>
-                            <div class="swiper-slide"><img src="//into-the-program.com/demo/images/sample012.jpg"
-                                    alt=""></div>
-                            <div class="swiper-slide"><img src="//into-the-program.com/demo/images/sample007.jpg"
-                                    alt=""></div>
-                            <div class="swiper-slide"><img src="//into-the-program.com/demo/images/sample008.jpg"
-                                    alt=""></div>
-                            <div class="swiper-slide"><img src="//into-the-program.com/demo/images/sample009.jpg"
-                                    alt=""></div>
+                        <?php foreach ($productimages as $productimage) : ?>
+                            <img src="<?= $productimage != null ? base_url('uploads/img-product/' . $productimage[0]->image) : base_url('assets/static/images/product.png') ?>" class="card-img-top img-fluid" alt="product" />
+                        <?php endforeach; ?>
                         </div>
                     </div>
 
                     <div thumbsSlider="" class="swiper mySwiper">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide"><img src="<?= base_url('assets/static/images/macbook.png') ?>"
-                                    alt=""></div>
-                            <div class="swiper-slide"><img src="<?= base_url('assets/static/images/macbook.png') ?>"
-                                    alt=""></div>
-                            <div class="swiper-slide"><img src="//into-the-program.com/demo/images/sample012.jpg"
-                                    alt=""></div>
-                            <div class="swiper-slide"><img src="//into-the-program.com/demo/images/sample007.jpg"
-                                    alt=""></div>
-                            <div class="swiper-slide"><img src="//into-the-program.com/demo/images/sample008.jpg"
-                                    alt=""></div>
-                            <div class="swiper-slide"><img src="//into-the-program.com/demo/images/sample009.jpg"
-                                    alt=""></div>
+                        <?php foreach ($productimages as $productimage) : ?>
+                            <img src="<?= $productimage != null ? base_url('uploads/img-product/' . $productimage[0]->image) : base_url('assets/static/images/product.png') ?>" class="card-img-top img-fluid" alt="product" />
+                        <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
@@ -49,16 +31,12 @@
                     <div class="d-flex justify-content-between align-items-center p-4">
                         <div>
                             <h3 class="fw-semibold text-custom-red mb-3">
-                                Rp. <?= number_format(20000000, 0, ',', '.') ?>
+                                Rp. <?= number_format($product->harga, 0, ',', '.') ?>
                             </h3>
                             <div class="d-flex gap-1">
                                 <i class="fa-solid fa-star text-warning"></i>
-                                <i class="fa-solid fa-star text-warning"></i>
-                                <i class="fa-solid fa-star text-warning"></i>
-                                <i class="fa-solid fa-star text-warning"></i>
-                                <i class="fa-solid fa-star"></i>
 
-                                <small class="text-muted">(4)</small>
+                                <small class="text-muted">(<?= $product->rating ?>)</small>
                             </div>
                         </div>
                         <button class="btn btn-custom-cart d-md-none d-inline" data-bs-toggle="modal"
@@ -77,7 +55,7 @@
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <p class="fw-medium text-black">Stock: 125</p>
+                                        <p class="fw-medium text-black">Stock: <?= $product->stok ?></p>
                                         <div class="input-group number-spinner rounded-3"
                                             style="background-color: #f5f5f5;">
                                             <span class="input-group-btn">
@@ -93,15 +71,12 @@
                                         <div class="d-lg-flex d-md-block d-flex justify-content-between">
                                             <p class="text-muted fw-medium mb-0">Price</p>
                                             <p class="text-black fw-medium mb-0">Rp.
-                                                <?= number_format(20000000, 0, ',', '.') ?></p>
+                                                <?= number_format($product->harga, 0, ',', '.') ?></p>
                                         </div>
                                         <hr>
                                         <!-- masuk cart -->
                                         <button type="submit" class="btn btn-custom-submit w-100 mb-2">Add to
                                             Cart</button>
-                                        <!-- langsung checkout -->
-                                        <button type="submit" class="btn btn-custom-outline-submit w-100 mb-2">Buy
-                                            Now</button>
                                     </div>
                                 </div>
                             </div>
@@ -113,37 +88,15 @@
                     Product Description
                 </h5>
                 <p class="text-black">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. At atque sit placeat in quam. In fuga ipsa
-                    velit consectetur dolore? Ipsa blanditiis nisi corrupti provident aut perferendis adipisci
-                    distinctio laborum repellat dolor facere nam assumenda maiores nesciunt ratione animi, placeat
-                    mollitia? Maiores praesentium earum nobis, quia inventore veniam eaque odio eligendi perferendis
-                    dicta quis, doloribus, quidem omnis! Dolore consequuntur accusantium magni voluptates asperiores a
-                    culpa, officiis reiciendis ipsa placeat omnis suscipit, vero quaerat esse iste voluptatum? Numquam
-                    maxime a ipsa amet adipisci modi molestias nihil odio repellendus, vitae illo consequuntur.
-                    Dignissimos qui illum in itaque saepe sint est quos aspernatur alias at numquam quisquam earum
-                    harum, quasi vel nobis. Libero tempore ut ipsa, veritatis dolore molestiae molestias, alias nostrum
-                    beatae distinctio ab aut ipsum qui porro assumenda sequi deserunt soluta ullam iste accusantium.
-                    Rerum nulla laboriosam aliquid? Obcaecati aperiam illum repellendus facere similique ipsum excepturi
-                    commodi ducimus tempora praesentium eum quam ullam ab consectetur voluptatum natus vitae a
-                    exercitationem, cumque, corporis deserunt eaque cupiditate voluptates aut! Ullam in omnis
-                    perferendis nihil! Porro in similique perspiciatis ipsum quam autem velit ab. Vitae perferendis
-                    suscipit obcaecati impedit illo! Ullam harum possimus est, dolor facere quae cupiditate! Soluta
-                    accusantium minus culpa magnam quia totam officia dicta rerum, recusandae cum quas, incidunt sit aut
-                    aperiam aliquam ut voluptatibus perferendis, ducimus reiciendis nulla! Modi facilis, molestias
-                    obcaecati quod nulla minus illum at praesentium eveniet sunt numquam? Molestias, veritatis earum
-                    amet, maxime quis voluptas quisquam eos similique dignissimos ullam omnis! Quidem optio, velit
-                    commodi sint adipisci, praesentium repellat, molestias veniam vitae quia atque dolorum dolor autem
-                    provident laboriosam expedita consequuntur? Illo temporibus, eaque doloribus nemo fugit iure
-                    excepturi natus quidem accusantium quasi soluta pariatur explicabo ullam molestiae aut? Dolore
-                    eligendi consequatur dolorem nam, voluptatibus ea quisquam alias maiores eos illo veritatis
-                    explicabo doloremque quos vitae culpa!
+                <?= $product->detail ?>
                 </p>
             </div>
         </div>
         <div class="col-md-3 col-11 d-md-block d-none">
             <div class="p-4 bg-white rounded-4 shadow-sm">
+            <form action="<?= base_url('/add-to-cart/') . $product->id ?>" method="POST">
                 <h5 class="text-black fw-semibold mb-4">Checkout</h5>
-                <p class="fw-medium text-black">Stock: 125</p>
+                <p class="fw-medium text-black">Stock: <?= $product->stok ?></p>
                 <hr>
                 <div class="input-group number-spinner rounded-3" style="background-color: #f5f5f5;">
                     <span class="input-group-btn">
@@ -158,13 +111,13 @@
                 <hr>
                 <div class="d-lg-flex d-md-block d-flex justify-content-between">
                     <p class="text-muted fw-medium mb-0">Price</p>
-                    <p class="text-black fw-medium mb-0">Rp. <?= number_format(20000000, 0, ',', '.') ?></p>
+                    <p class="text-black fw-medium mb-0">Rp. <?= number_format($product->harga, 0, ',', '.') ?></p>
                 </div>
                 <hr>
+                <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
                 <!-- masuk cart -->
                 <button type="submit" class="btn btn-custom-submit w-100 mb-2">Add to Cart</button>
-                <!-- langsung checkout -->
-                <button type="submit" class="btn btn-custom-outline-submit w-100 mb-2">Buy Now</button>
+            </form>
             </div>
         </div>
     </div>
@@ -305,69 +258,59 @@
                 <!-- JIKA JUMLAH LEBIH DARI 6 -->
                 <div class="swiper referenceProducts">
                     <div class="swiper-wrapper">
-                        <?php for ($i = 0; $i < 8; $i++) : ?>
+                    <?php if ($relatedproducts != null) : ?>
+                        <?php foreach ($relatedproducts as $related) : ?>
                         <div class="swiper-slide">
-                            <a href="/detail-product/">
+                            <a href="<?= base_url('/detail-product/') . $related->id ?>">
                                 <div class="card shadow">
                                     <div class="card-content">
-                                        <img src="<?= base_url('assets/static/images/macbook.png') ?>"
-                                            class="card-img-top p-3" alt="product" style="background: #f5f5f5" />
+                                    <img src="<?= $related->images != null ? base_url('uploads/img-product/' . $related->images[0]->image) : base_url('assets/static/images/product.png') ?>" class="card-img-top img-fluid" alt="product" />
                                         <div class="card-body px-3">
                                             <p class="fw-semibold fs-custom-references mb-2 text-truncate">
-                                                Macbook Pro 2021
+                                            <?= $related->nama_produk ?>
                                             </p>
                                             <div class="d-flex mb-2 align-items-center" style="font-size:10px">
                                                 <i class="fa-solid fa-star text-warning"></i>
-                                                <i class="fa-solid fa-star text-warning"></i>
-                                                <i class="fa-solid fa-star text-warning"></i>
-                                                <i class="fa-solid fa-star text-warning"></i>
-                                                <i class="fa-solid fa-star text-warning"></i>
                                                 <span class="text-muted fs-custom-references ms-1"
-                                                    style="font-size:10px">(4)</span>
+                                                    style="font-size:10px">(<?= $related->rating ?>)</span>
                                             </div>
                                             <p class="fw-semibold text-custom-red fs-custom-references mb-0">
-                                                Rp. <?= number_format(10000000, 0, ',', '.') ?>
+                                                Rp. <?= number_format($related->harga, 0, ',', '.') ?>
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             </a>
                         </div>
-                        <?php endfor; ?>
+                        <?php endforeach; ?>
+                        <?php else : ?>
+                            <?php foreach ($products as $product) : ?>
+                            <div class="swiper-slide">
+                                <a href="<?= base_url('/detail-product/') . $product->id ?>">
+                                    <div class="card shadow">
+                                        <div class="card-content">
+                                        <img src="<?= $product->images != null ? base_url('uploads/img-product/' . $product->images[0]->image) : base_url('assets/static/images/product.png') ?>" class="card-img-top img-fluid" alt="product" />
+                                            <div class="card-body px-3">
+                                                <p class="fw-semibold fs-custom-references mb-2 text-truncate">
+                                                <?= $product->nama_produk ?>
+                                                </p>
+                                                <div class="d-flex mb-2 align-items-center" style="font-size:10px">
+                                                    <i class="fa-solid fa-star text-warning"></i>
+                                                    <span class="text-muted fs-custom-references ms-1"
+                                                        style="font-size:10px">(<?= $product->rating ?>)</span>
+                                                </div>
+                                                <p class="fw-semibold text-custom-red fs-custom-references mb-0">
+                                                    Rp. <?= number_format($product->harga, 0, ',', '.') ?>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <?php endforeach; ?>
+                    <?php endif; ?>
                     </div>
                 </div>
-                <!-- JIKA JUMLAH KURANG DARI 6, tanpa slider -->
-                <!-- <div class="row mb-3 justify-content-start">
-                    <?php for ($i = 0; $i < 6; $i++) : ?>
-                    <div class="col-6 col-md-4 col-lg-2">
-                        <a href="/detail-product/">
-                            <div class="card shadow">
-                                <div class="card-content">
-                                    <img src="<?= base_url('assets/static/images/macbook.png') ?>"
-                                        class="card-img-top p-3" alt="product" style="background: #f5f5f5" />
-                                    <div class="card-body px-3">
-                                        <p class="fw-semibold fs-custom-references mb-2 text-truncate">
-                                            Macbook Pro 2021
-                                        </p>
-                                        <div class="d-flex mb-2">
-                                            <small><i class="fa-solid fa-star text-warning"></i></small>
-                                            <small><i class="fa-solid fa-star text-warning"></i></small>
-                                            <small><i class="fa-solid fa-star text-warning"></i></small>
-                                            <small><i class="fa-solid fa-star text-warning"></i></small>
-                                            <small><i class="fa-solid fa-star text-warning"></i></small>
-                                            <small class="text-muted">(4)</small>
-                                        </div>
-                                        <p class="fw-semibold text-custom-red fs-custom-references mb-0">
-                                            Rp. <?= number_format(10000000, 0, ',', '.') ?>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <?php endfor; ?>
-
-                </div> -->
             </div>
         </div>
     </div>

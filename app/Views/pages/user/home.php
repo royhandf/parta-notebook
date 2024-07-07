@@ -36,7 +36,7 @@
                         <h2 class="text-white fw-bold pt-4 ms-5 text-custom-heading">Adapter</h2>
                     </div>
                     <div class="col-12 text-end">
-                        <img src="<?= base_url('assets/static/images/power-adapter.png') ?>" alt="lcd"
+                        <img src="<?= base_url('assets/static/images/power-adapter.png') ?>" alt="adapter"
                             class="img-fluid">
                     </div>
                 </div>
@@ -79,102 +79,62 @@
                 <!-- JIKA JUMLAH LEBIH DARI 6 -->
                 <div class="swiper newArrival">
                     <div class="swiper-wrapper">
-                        <?php for ($i = 0; $i < 8; $i++) : ?>
+                    <?php foreach ($latestproducts as $latest) : ?>
                         <div class="swiper-slide">
-                            <a href="/detail-product/">
+                            <a href="<?= base_url('/detail-product/') . $latest->id ?>">
                                 <div class="card shadow">
                                     <div class="card-content">
-                                        <img src="<?= base_url('assets/static/images/macbook.png') ?>"
-                                            class="card-img-top p-3" alt="product" style="background: #f5f5f5" />
+                                    <img src="<?= $latest->images != null ? base_url('uploads/img-product/' . $latest->images[0]->image) : base_url('assets/static/images/product.png') ?>" class="card-img-top img-fluid" alt="product" />
+
                                         <div class="card-body px-3">
                                             <p class="fw-semibold fs-custom-references mb-2 text-truncate">
-                                                Macbook Pro 2021
+                                                <?= $latest->nama_produk ?>
                                             </p>
                                             <div class="d-flex mb-2 align-items-center" style="font-size:10px">
                                                 <i class="fa-solid fa-star text-warning"></i>
-                                                <i class="fa-solid fa-star text-warning"></i>
-                                                <i class="fa-solid fa-star text-warning"></i>
-                                                <i class="fa-solid fa-star text-warning"></i>
-                                                <i class="fa-solid fa-star text-warning"></i>
                                                 <span class="text-muted fs-custom-references ms-1"
-                                                    style="font-size:10px">(4)</span>
+                                                    style="font-size:10px">(<?= $latest->rating ?>)</span>
                                             </div>
                                             <p class="fw-semibold text-custom-red fs-custom-references mb-0">
-                                                Rp. <?= number_format(10000000, 0, ',', '.') ?>
+                                                Rp. <?= number_format($latest->harga, 0, ',', '.') ?>
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             </a>
                         </div>
-                        <?php endfor; ?>
+                        <?php endforeach; ?>
                     </div>
                 </div>
-                <!-- JIKA JUMLAH KURANG DARI 6, tanpa slider -->
-                <!-- <div class="row mb-3 justify-content-start">
-                    <?php for ($i = 0; $i < 6; $i++) : ?>
-                    <div class="col-6 col-md-4 col-lg-2">
-                        <a href="/detail-product/">
-                            <div class="card shadow">
-                                <div class="card-content">
-                                    <img src="<?= base_url('assets/static/images/macbook.png') ?>"
-                                        class="card-img-top p-3" alt="product" style="background: #f5f5f5" />
-                                    <div class="card-body px-3">
-                                        <p class="fw-semibold fs-custom-references mb-2 text-truncate">
-                                            Macbook Pro 2021
-                                        </p>
-                                        <div class="d-flex mb-2">
-                                            <small><i class="fa-solid fa-star text-warning"></i></small>
-                                            <small><i class="fa-solid fa-star text-warning"></i></small>
-                                            <small><i class="fa-solid fa-star text-warning"></i></small>
-                                            <small><i class="fa-solid fa-star text-warning"></i></small>
-                                            <small><i class="fa-solid fa-star text-warning"></i></small>
-                                            <small class="text-muted">(4)</small>
-                                        </div>
-                                        <p class="fw-semibold text-custom-red fs-custom-references mb-0">
-                                            Rp. <?= number_format(10000000, 0, ',', '.') ?>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <?php endfor; ?>
-                </div> -->
             </div>
         </div>
     </div>
 
     <h3 class="text-black mb-5 fw-bold text-center text-custom-heading">RECOMMENDATION</h3>
     <div class="row justify-content-sm-start justify-content-center">
-        <?php for ($i = 0; $i < 11; $i++) : ?>
+        <?php foreach ($products as $product) : ?>
         <div class="col-lg-2 col-md-4 col-sm-6 col-5">
-            <a href="/detail-product/">
+            <a href="<?= base_url('/detail-product/') . $product->id ?>">
                 <div class="card shadow">
                     <div class="card-content">
-                        <img src="<?= base_url('assets/static/images/macbook.png') ?>" class="card-img-top p-3"
-                            alt="product" style="background: #f5f5f5" />
+                    <img src="<?= $product->images != null ? base_url('uploads/img-product/' . $product->images[0]->image) : base_url('assets/static/images/product.png') ?>" class="card-img-top img-fluid" alt="product" />
                         <div class="card-body px-3">
                             <p class="fw-semibold fs-custom-references mb-2 text-truncate">
-                                Macbook Pro 2021
+                            <?= $product->nama_produk ?>
                             </p>
                             <div class="d-flex mb-2 align-items-center" style="font-size:10px">
                                 <i class="fa-solid fa-star text-warning"></i>
-                                <i class="fa-solid fa-star text-warning"></i>
-                                <i class="fa-solid fa-star text-warning"></i>
-                                <i class="fa-solid fa-star text-warning"></i>
-                                <i class="fa-solid fa-star text-warning"></i>
-                                <span class="text-muted fs-custom-references ms-1" style="font-size:10px">(4)</span>
+                                <span class="text-muted fs-custom-references ms-1" style="font-size:10px">(<?= $product->rating ?>)</span>
                             </div>
                             <p class="fw-semibold text-custom-red fs-custom-references mb-0">
-                                Rp. <?= number_format(10000000, 0, ',', '.') ?>
+                                Rp. <?= number_format($product->harga, 0, ',', '.') ?>
                             </p>
                         </div>
                     </div>
                 </div>
             </a>
         </div>
-        <?php endfor; ?>
+        <?php endforeach; ?>
     </div>
 </div>
 <?= $this->endSection(); ?>

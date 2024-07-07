@@ -23,16 +23,17 @@
         <div class="card p-4 mx-2" style="width: 100%; max-width: 500px;">
             <div class="card-body">
                 <h2 class="text-start mb-5">Log in</h2>
-                <form>
+                <form action="<?php echo base_url('/login'); ?>" method="POST">
                     <div class="mb-3">
                         <label for="email" class="form-label fw-semibold text-black">Email</label>
-                        <input type="email" class="form-control" id="email" placeholder="user@example.com">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="user@example.com" required>
                     </div>
                     <div class="mb-5">
                         <label for="password" class="form-label fw-semibold text-black">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="**********">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="**********" required>
                     </div>
                     <div class="d-grid">
+                        <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
                         <button type="submit" class="btn btn-custom-auth mb-3">Log in</button>
                         <small class="text-center">Don't have an account? <a href="<?= base_url('register') ?>"
                                 class="text-custom-auth">Register</a>

@@ -37,24 +37,20 @@
                                                 Category
                                             </button>
                                             <ul id="collapseCategories" class="collapse list-unstyled mt-2">
+                                                <?php
+                        foreach ($categories as $category) { ?>
                                                 <li>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio" name="category"
-                                                            value="laptop" id="laptop">
-                                                        <label class="form-check-label" for="laptop">
-                                                            Laptop
+                                                            value="<?= $category->id ?>" id="<?= $category->id ?>">
+                                                        <label class="form-check-label" for="<?= $category->id ?>">
+                                                            <?= $category->nama_kategori ?>
                                                         </label>
                                                     </div>
                                                 </li>
-                                                <li>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="category"
-                                                            value="smartphone" id="smartphone">
-                                                        <label class="form-check-label" for="smartphone">
-                                                            Smartphone
-                                                        </label>
-                                                    </div>
-                                                </li>
+                                                <?php
+                        }
+                        ?>
                                             </ul>
                                         </div>
 
@@ -136,34 +132,30 @@
                     </div>
                 </div>
                 <div class="row justify-content-start">
-                    <?php for ($i = 0; $i < 12; $i++) : ?>
+                    <?php foreach ($products as $product) { ?>
                     <div class="col-md-4 col-6">
-                        <a href="/detail-product/">
+                        <a href="<?= base_url('/detail-product/'. $product->id) ?>">
                             <div class="card shadow">
                                 <div class="card-content">
-                                    <img src="<?= base_url('assets/static/images/macbook.png') ?>"
+                                    <img src="<?= $product->images != null ? base_url('uploads/img-product/' . $product->images->image) : base_url('assets/static/images/product.png') ?>"
                                         class="card-img-top p-3" alt="product" style="background: #f5f5f5" />
                                     <div class="card-body px-3">
                                         <p class="fw-semibold mb-2 text-truncate">
-                                            Macbook Pro 2021
+                                        <?= $product->nama_produk ?>
                                         </p>
                                         <div class="d-flex mb-2 align-items-center" style="font-size:10px">
                                             <i class="fa-solid fa-star text-warning"></i>
-                                            <i class="fa-solid fa-star text-warning"></i>
-                                            <i class="fa-solid fa-star text-warning"></i>
-                                            <i class="fa-solid fa-star text-warning"></i>
-                                            <i class="fa-solid fa-star text-warning"></i>
-                                            <span class="text-muted ms-1" style="font-size:10px">(4)</span>
+                                            <span class="text-muted ms-1" style="font-size:10px">(<?= $product->rating ?>)</span>
                                         </div>
                                         <p class="fw-semibold text-custom-red fs-custom-references mb-0">
-                                            Rp. <?= number_format(10000000, 0, ',', '.') ?>
+                                            Rp. <?= number_format($product->harga, 0, ',', '.') ?>
                                         </p>
                                     </div>
                                 </div>
                             </div>
                         </a>
                     </div>
-                    <?php endfor; ?>
+                    <?php } ?>
 
                     <!-- PER PAGE ISI 12 PRODUK -->
                     <nav aria-label="Page navigation">
@@ -198,24 +190,17 @@
                             Category
                         </button>
                         <ul id="collapseCategories" class="collapse list-unstyled mt-2">
-                            <li>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="category" value="laptop"
-                                        id="laptop">
-                                    <label class="form-check-label" for="laptop">
-                                        Laptop
-                                    </label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="category" value="smartphone"
-                                        id="smartphone">
-                                    <label class="form-check-label" for="smartphone">
-                                        Smartphone
-                                    </label>
-                                </div>
-                            </li>
+                        <?php foreach ($categories as $category) { ?>
+                                                <li>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="category"
+                                                            value="<?= $category->id ?>" id="<?= $category->id ?>">
+                                                        <label class="form-check-label" for="<?= $category->id ?>">
+                                                            <?= $category->nama_kategori ?>
+                                                        </label>
+                                                    </div>
+                                                </li>
+                        <?php } ?>
                         </ul>
                     </div>
 

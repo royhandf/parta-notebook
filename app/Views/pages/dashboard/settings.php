@@ -37,22 +37,23 @@
                     </div>
                     <div class="col-12 rounded-4" style="background: #f5f5f5;">
                         <div class="p-3">
-                            <form action="" method="POST">
+                        <form method="POST" action="<?= base_url('dashboard/settings/update/') . $admin->id ?>">
                                 <div class="mb-3">
-                                    <label for="payment" class="text-black fw-medium mb-2">Payment Method</label>
-                                    <select class="form-select" name="payment" id="payment" required>
-                                        <option value="BCA" selected>BCA</option>
-                                        <option value="MANDIRI">MANDIRI</option>
-                                        <option value="BRI">BRI</option>
-                                        <option value="BSI">BSI</option>
+                                    <label for="bank" class="text-black fw-medium mb-2">Payment Method</label>
+                                    <select class="form-select" name="bank" id="bank" required>
+                                        <option value="BCA" <?= $admin->bank == 'BCA' ? 'selected' : '' ?>>BCA</option>
+                                        <option value="MANDIRI" <?= $admin->bank == 'MANDIRI' ? 'selected' : '' ?>>MANDIRI</option>
+                                        <option value="BRI" <?= $admin->bank == 'BRI' ? 'selected' : '' ?>>BRI</option>
+                                        <option value="BSI" <?= $admin->bank == 'BSI' ? 'selected' : '' ?>>BSI</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="account" class="text-black fw-medium mb-2">Account Number</label>
-                                    <input type="text" class="form-control" name="account" id="account" required
-                                        value="1234 5678 9012 3456">
+                                    <label for="no_rek" class="text-black fw-medium mb-2">Account Number</label>
+                                    <input type="text" class="form-control" name="no_rek" id="no_rek" required
+                                        value=<?= $admin->no_rek ?>>
                                 </div>
                                 <div class="mb-2 text-end">
+                                    <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
                                     <button type="submit" class="btn btn-custom-submit">Save</button>
                                 </div>
                             </form>

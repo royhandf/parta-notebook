@@ -45,110 +45,118 @@
                             </tr>
                         </thead>
                         <tbody>
+                        <?php
+                            $no = 1;
+                            foreach ($transactions as $transaction) : ?>
                             <tr>
-                                <td>1</td>
-                                <td>INV/20210801/1</td>
-                                <td>01-08-2021</td>
-                                <td>John Doe</td>
-                                <td>Rp. <?= number_format(10000000, 0, ',', '.') ?></td>
+                                <td><?= $no++ ?></td>
+                                <td><?= $transaction->kode_transaksi ?></td>
+                                <td><?= $transaction->created_at ?></td>
+                                <td><?= $transaction->user->nama_lengkap ?></td>
+                                <td>Rp. <?= number_format($transaction->total_bayar, 0, ',', '.') ?></td>
                                 <td>
-                                    <!-- <span class="badge bg-danger">Canceled</span>
-                                    <span class="badge bg-warning">Pending</span> -->
-                                    <span class="badge bg-success">Success</span>
+                                <?php if ($transaction->status == 'pending') : ?>
+                                            <span class="badge bg-warning">Pending</span>
+                                        <?php elseif ($transaction->status == 'canceled') : ?>
+                                            <span class="badge bg-danger">Canceled</span>
+                                        <?php elseif ($transaction->status == 'success') : ?>
+                                            <span class="badge bg-success">Success</span>
+                                        <?php endif; ?>
                                 </td>
                                 <td>
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#detailTransaction"
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#detail<?= $transaction->id ?>"
                                         class="btn btn-info btn-sm edit-button">
                                         <i class=" fa-regular fa-eye"></i>
                                     </a>
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#editStatus"
+                                    <div class="modal fade" id="detail<?= $transaction->id ?>" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-md modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Detail Transaction
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <table class="table">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>No.</th>
+                                                                                <th>Products</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                        <?php $number = 1;
+                                                                        foreach ($transaction->detailtransactions as $key => $detail) : ?>
+                                                                            <tr>
+                                                                                <td><?= $number++ ?></td>
+                                                                                <td><?= $detail->nama_produk ?>
+                                                                                    <small>x<?= $detail->qty ?> pcs</small>
+                                                                                </td>
+                                                                            </tr>
+                                                                        <?php endforeach; ?>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#edit<?= $transaction->id ?>"
                                         class="btn btn-warning btn-sm edit-button">
                                         <i class="fa-regular fa-pen-to-square"></i>
                                     </a>
+                                    <div class="modal fade" id="edit<?= $transaction->id ?>" tabindex="-1" aria-labelledby="editLabel"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Change Status</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form class="form form-horizontal" id="form-product" method="post" action="<?= base_url('dashboard/transactions/update/') . $transaction->id ?>">
+                                                        <div class="form-body">
+                                                            <div class="col-md-12 form-group">
+                                                                <label for="category">Status</label>
+                                                                <select class="form-control" name="status" required>
+                                                                        <?php foreach ($statuses as $status) { ?>
+                                                                            <option value="<?= $status ?>" <?= ($status == $transaction->status) ? 'selected' : '' ?>><?= $status ?></option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                            </div>
+                                                            <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
+                                                            <div class="col-sm-12 d-flex justify-content-end">
+                                                                <button type="submit" name="submit"
+                                                                    class="btn btn-custom-submit me-1 mb-1">Save</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                    <form action="" method="POST" class="form-delete d-inline-block">
-                                        <button type="submit" class="btn btn-danger btn-sm delete-item">
+                                    <form action="<?= base_url('dashboard/transactions/delete/') . $transaction->id ?>" method="POST" class="form-delete d-inline-block">
+                                    <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
+                                    <button type="submit" class="btn btn-danger btn-sm delete-item">
                                             <i class="fa-regular fa-trash-can"></i>
                                         </button>
                                     </form>
                                 </td>
                             </tr>
+                        <?php endforeach; ?>
                         </tbody>
                     </table>
-                    <div class="modal fade" id="detailTransaction" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-md modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Detail Transaction
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <table class="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>No.</th>
-                                                                <th>Products</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <th>1</th>
-                                                                <td>Macbook Pro 2021
-                                                                    <small>x10 pcs</small>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>2</th>
-                                                                <td>iPhone 12 Pro Max
-                                                                    <small>x5 pcs</small>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal fade" id="editStatus" tabindex="-1" aria-labelledby="editLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-lg modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Change Status</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form class="form form-horizontal" id="form-product" method="post" action="">
-                                        <div class="form-body">
-                                            <div class="col-md-12 form-group">
-                                                <label for="category">Status</label>
-                                                <select class="form-control" name="status" required>
-                                                    <option value="Pending">Pending</option>
-                                                    <option value="Canceled">Canceled</option>
-                                                    <option value="Success">Success</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-sm-12 d-flex justify-content-end">
-                                                <button type="submit" name="submit"
-                                                    class="btn btn-custom-submit me-1 mb-1">Save</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

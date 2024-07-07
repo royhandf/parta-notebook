@@ -2,7 +2,7 @@
     <div class="sidebar-wrapper active shadow-sm">
         <div class="sidebar-header position-relative">
             <div class="container-fluid text-center">
-                <a href="/dashboard">
+                <a href="/">
                     <img class="w-75 h-75" src="<?= base_url('assets/static/images/logo.jpg') ?>" alt="Logo" />
                 </a>
             </div>
@@ -15,7 +15,7 @@
                         <i class="fa-solid fa-house"></i> <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="sidebar-item <?= $title == 'Setting' ? 'active' : '' ?>">
+                <li class="sidebar-item <?= $title == 'Settings' ? 'active' : '' ?>">
                     <a href="/dashboard/settings" class="sidebar-link fw-medium text-black">
                         <i class="fa-solid fa-cog"></i> <span>Settings</span>
                     </a>
@@ -45,9 +45,7 @@
                         <i class="fa-regular fa-star"></i> <span>Reviews</span>
                     </a>
                 </li>
-
                 <hr>
-
                 <li class="sidebar-item">
                     <a href="/logout" class="sidebar-link fw-medium text-black">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Logout</span>

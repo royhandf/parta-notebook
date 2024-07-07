@@ -40,45 +40,24 @@
                             </tr>
                         </thead>
                         <tbody>
+                        <?php
+                            $no = 1;
+                            foreach ($reviews as $review) { ?>
                             <tr>
-                                <td>1</td>
-                                <td>Mie Ayam</td>
-                                <td>John Doe</td>
+                                <td><?= $no++ ?></td>
+                                <td><?= $review->nama_produk ?></td>
+                                <td><?= $review->nama_lengkap ?></td>
                                 <td>
                                     <div class="d-flex gap-1 mb-1">
-                                        <i class="fa fa-star text-warning"></i>
-                                        <i class="fa fa-star text-warning"></i>
-                                        <i class="fa fa-star text-warning"></i>
-                                        <i class="fa fa-star text-warning"></i>
-                                        <i class="fa fa-star"></i>
+                                        <?php for ($i = 0; $i < $review->rating; $i++) { ?>
+                                            <i class="fa fa-star text-warning"></i>
+                                        <?php } ?>
                                     </div>
-                                    <div>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iusto quasi ea,
-                                        perferendis ipsa corrupti eligendi, unde enim ipsum expedita fugit dolor.
-                                        Repellat ad saepe nam consequuntur culpa facilis esse voluptatem?</div>
+                                    <div><?= $review->description ?></div>
                                 </td>
-                                <td>01-08-2021</td>
-
+                                <td><?= $review->updated_at ?></td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Laptop Macbook Pro</td>
-                                <td>Jane Doe</td>
-                                <td>
-                                    <div class="d-flex gap-1 mb-1">
-                                        <i class="fa fa-star text-warning"></i>
-                                        <i class="fa fa-star text-warning"></i>
-                                        <i class="fa fa-star text-warning"></i>
-                                        <i class="fa fa-star text-warning"></i>
-                                        <i class="fa fa-star text-warning"></i>
-                                    </div>
-                                    <div>
-                                        Laptopnya bagus banget, performanya juga mantap pokoknya recommended deh.
-                                        Harganya juga worth it
-                                    </div>
-                                </td>
-                                <td>01-08-2021</td>
-
-                            </tr>
+                        <?php } ?>
                         </tbody>
                     </table>
                 </div>

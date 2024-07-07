@@ -78,6 +78,31 @@
     <!-- Datepicker -->
     <script src="<?= base_url('assets/extensions/moment/moment.min.js') ?>"></script>
     <script src="<?= base_url('assets/extensions/daterangepicker/daterangepicker.js') ?>"></script>
+
+
+    <?php if (session()->getFlashdata('success')) : ?>
+        <script>
+            Swal.fire({
+                icon: "success",
+                title: "Success!",
+                text: "<?= session()->getFlashdata('success') ?>",
+                confirmButtonText: 'OK'
+            });
+        </script>
+    <?php endif; ?>
+
+
+    <?php if (session()->getFlashdata('error')) : ?>
+        <script>
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "<?= session()->getFlashdata('error') ?>",
+                confirmButtonText: 'OK'
+            });
+        </script>
+    <?php endif; ?>
+    
 </body>
 
 </html>

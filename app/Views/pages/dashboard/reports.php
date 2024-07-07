@@ -54,20 +54,17 @@
                             </tr>
                         </thead>
                         <tbody>
+                        <?php
+                            $no = 1;
+                            foreach ($transactions as $transaction) { ?>
                             <tr>
-                                <td>1</td>
-                                <td>2021-10-01</td>
-                                <td>ORD-001</td>
-                                <td>2</td>
-                                <td>Rp. <?= number_format(200000, 0, ',', '.') ?></td>
+                                <td> <?= $no++ ?></td>
+                                <td><?= $transaction->date ?></td>
+                                <td><?= $transaction->kode_transaksi ?></td>
+                                <td><?= $transaction->total_qty?></td>
+                                <td><?= $transaction->total_price ?></td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>2021-10-02</td>
-                                <td>ORD-002</td>
-                                <td>3</td>
-                                <td>Rp. <?= number_format(300000, 0, ',', '.') ?></td>
-                            </tr>
+                            <?php } ?>
                         </tbody>
                     </table>
                 </div>

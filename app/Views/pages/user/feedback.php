@@ -7,20 +7,20 @@
         <div class="col-md-12 col-11">
             <div class="px-md-5 px-3 py-4 bg-white rounded-4 shadow-sm">
                 <h2 class="text-black fw-semibold mb-3">My Orders</h2>
+                <?php foreach ($transactions as $transaction) { ?>
                 <div class="border border-1 border-secondary rounded-3 mb-4">
                     <div class="row justify-content-between p-3">
                         <div class="col-lg-4 col-md-6 col-7">
-                            <p class="text-black fs-custom-paragraph fw-medium mb-2">31 December 2021</p>
+                            <p class="text-black fs-custom-paragraph fw-medium mb-2">
+                                <?= $transaction->created_at ?></p>
 
                             <div class="d-flex mb-3">
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
+                            <?php for ($i = 0; $i < $transaction->details->review->star; $i++) { ?>
+                                            <i class="fa fa-star text-warning"></i>
+                            <?php } ?>
                             </div>
                             <div class="d-flex gap-1 align-items-center">
-                                <a href="/detail-transaction" class="btn btn-custom-submit">
+                                <a href="<?= base_url('/detail-transaction/'. $transaction->id) ?>" class="btn btn-custom-submit">
                                     View <span class="d-md-inline d-none">Detail</span>
                                 </a>
                                 <button type="submit" class="btn btn-custom-outline-submit px-2" data-bs-toggle="modal"
@@ -59,7 +59,7 @@
                                                             id="review" rows="3"></textarea>
                                                     </div>
                                                     <!-- JIKA SUDAH SUBMIT HILANGKAN BUTTON -->
-                                                    <a href="/detail-transaction" class="btn btn-custom-submit w-100">
+                                                    <a href="<?= base_url('/detail-transaction/'. $transaction->id) ?>" class="btn btn-custom-submit w-100">
                                                         Submit Review
                                                     </a>
                                                 </form>
@@ -81,6 +81,8 @@
                         </div>
                     </div>
                 </div>
+                <?php } ?>
+
 
                 <div class="border border-1 border-secondary rounded-3 mb-4">
                     <div class="row justify-content-between p-3">

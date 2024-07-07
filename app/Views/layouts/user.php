@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="<?= base_url('assets/static/images/logo.jpg') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/compiled/css/app.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/static/css/custom.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/extensions/sweetalert2/sweetalert2.min.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/extensions/fontawesome/css/all.min.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/extensions/swiper/swiper-bundle.min.css') ?>">
 </head>
@@ -20,6 +21,7 @@
     <script src="<?= base_url('assets/compiled/js/app.js') ?>"></script>
     <script src="<?= base_url('assets/extensions/jquery/jquery.min.js') ?>"></script>
     <script src="<?= base_url('assets/extensions/sweetalert2/sweetalert2.min.js') ?>"></script>
+    <script src="<?= base_url('assets/static/js/pages/swalfire.js') ?>"></script>
     <script src="<?= base_url('assets/extensions/swiper/swiper-bundle.min.js') ?>"></script>
 
     <script>
@@ -135,25 +137,34 @@
     });
     </script>
 
+<script>
+        function deleteItem() {
+            document.querySelector('.delete-form').submit();
+        }
+    </script>
 
-    <script>
+
+<?php  ?>
     <?php if (session()->getFlashdata('success')) : ?>
-    Swal.fire({
-        icon: "success",
-        title: "Success!",
-        text: "<?= session()->getFlashdata('success') ?>",
-        confirmButtonText: 'OK'
-    });
+        <script>
+            Swal.fire({
+                icon: "success",
+                title: "Success!",
+                text: "<?= session()->getFlashdata('success') ?>",
+                confirmButtonText: 'OK'
+            });
+        </script>
     <?php endif; ?>
 
     <?php if (session()->getFlashdata('error')) : ?>
-    Swal.fire({
-        icon: "error",
-        title: "Error!",
-        text: "<?= session()->getFlashdata('error') ?>",
-        confirmButtonText: 'OK'
-    });
-    </script>
+        <script>
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "<?= session()->getFlashdata('error') ?>",
+                confirmButtonText: 'OK'
+            });
+        </script>
     <?php endif; ?>
 </body>
 

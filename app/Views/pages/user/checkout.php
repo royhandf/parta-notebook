@@ -18,49 +18,49 @@
                     <div class="d-flex flex-column mb-4">
                         <h5 class="fw-medium text-muted mb-3">ADDRESS</h5>
                         <div class="mb-4">
-                            <h5 class="text-black fw-medium">Agus Salam</h5>
-                            <!-- if ada alamat -->
-                            <p class="text-black">Jl. Kebon Jeruk No. 123 RT 01 RW 02, Kec. Bogor Selatan,
-                                Kota Bogor, Jawa Barat, 16123</p>
-                            <!-- else -->
-                            <!-- <p class="text-black">Address not set</p> -->
-
-                            <p class="text-black">081234567890</p>
+                            <h5 class="text-black fw-medium"><?= $user->nama_lengkap ?></h5>
+                            <?php if ($user->alamat) : ?>
+                                <p class="text-black"><?= $user->alamat ?></p>
+                            <?php else : ?>
+                                <p class="text-black">Address not set</p>
+                            <?php endif; ?>
+                            <?php if ($user->no_telp) : ?>
+                                <p class="text-black"><?= $user->no_telp ?></p>
+                            <?php else : ?>
+                                <p class="text-black">Phone number not set</p>
+                            <?php endif; ?>
                         </div>
 
                         <h5 class="fw-medium text-black mb-3">Order Summary</h5>
-                        <?php for($i = 0; $i < 2; $i++): ?>
+                        <?php foreach ($carts as $cart) { ?>
                         <div class="row justify-content-start mb-3">
                             <div class="col-lg-2 col-md-4 col-5">
                                 <div class="rounded-3 text-center" style="background: #f5f5f5;">
-                                    <img src="<?= base_url('assets/static/images/macbook.png') ?>" alt="product"
+                                <img src="<?= $cart->image != null ? base_url('uploads/img-product/' . $cart->image->image) : base_url('assets/static/images/product.png') ?>" alt="product"
                                         class="p-md-2 p-3" height="80">
                                 </div>
                             </div>
                             <div class="col-6">
-                                <p class="text-black mb-1">Macbook Pro 2021</p>
+                                <p class="text-black mb-1"><?= $cart->product->nama_produk ?></p>
                                 <p class="text-custom-red mb-0">Rp.
-                                    <?= number_format(20000000, 0, ',', '.') ?>
-                                    <small class="text-black">x2</small>
+                                    <?= number_format($cart->product->harga, 0, ',', '.') ?>
+                                    <small class="text-black">x<?= $cart->qty ?></small>
                                 </p>
                             </div>
                         </div>
-                        <?php endfor; ?>
+                        <?php } ?>
                     </div>
                 </form>
             </div>
         </div>
         <div class="col-lg-3 col-11">
             <div class="p-4 bg-white rounded-4 shadow-sm">
-                <form action="">
+                <form action="<?= base_url('/checkout') ?>" method="POST">
                     <div class="input-group mb-3">
                         <label class="input-group-text bg-transparent border-end-0" for="kurir"><i
                                 class="fa-solid fa-location-dot"></i></label>
                         <select class="form-select border-start-0" id="kurir">
                             <option value="JNE" selected>JNE</option>
-                            <option value="JNT">JNT</option>
-                            <option value="POS">POS</option>
-                            <option value="TIKI">TIKI</option>
                         </select>
                     </div>
                     <h5 class="fw-medium text-black mb-3">Order Summary</h5>
@@ -71,11 +71,12 @@
                             <p class="mb-2">Total</p>
                         </div>
                         <div class="d-flex flex-column text-black text-end">
-                            <p class="mb-2">Rp. <?= number_format(40000000, 0, ',', '.') ?></p>
-                            <p class="mb-4">Rp. <?= number_format(15000, 0, ',', '.') ?></p>
-                            <p class="mb-2">Rp. <?= number_format(40015000, 0, ',', '.') ?></p>
+                            <p class="mb-2">Rp. <?= number_format($subtotal, 0, ',', '.') ?></p>
+                            <p class="mb-4">Rp. <?= number_format($ongkir, 0, ',', '.') ?></p>
+                            <p class="mb-2">Rp. <?= number_format($total, 0, ',', '.') ?></p>
                         </div>
                     </div>
+                    <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
                     <button type="submit" name="submit"
                         class="btn btn-custom-submit d-block w-100 mt-4">Payment</button>
                 </form>

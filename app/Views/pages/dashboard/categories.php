@@ -54,15 +54,18 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <?php
+                            $no = 1;
+                            foreach ($categories as $category) { ?>
                             <tr>
-                                <td>1</td>
-                                <td>Category 1</td>
+                                <td><?= $no++ ?></td>
+                                <td><?= $category->nama_kategori ?></td>
                                 <td>
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#editCategory"
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#edit<?= $category->id ?>"
                                         class="btn btn-warning btn-sm">
                                         <i class="fa-regular fa-pen-to-square"></i>
                                     </a>
-                                    <div class="modal fade" id="editCategory" tabindex="-1" aria-labelledby="editLabel"
+                                    <div class="modal fade" id="edit<?= $category->id ?>" tabindex="-1" aria-labelledby="editLabel"
                                         aria-hidden="true">
                                         <div class="modal-dialog modal-md modal-dialog-centered">
                                             <div class="modal-content">
@@ -73,13 +76,14 @@
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form method="POST" action="">
+                                                <form method="post" action="<?= base_url('dashboard/categories/update/') . $category->id ?>">
                                                         <div class="form-body">
                                                             <div class="col-md-12 form-group">
                                                                 <label for="name">Name</label>
                                                                 <input type="text" id="name" class="form-control"
-                                                                    name="name" required value="Category 1">
+                                                                    name="name" required value="<?= $category->nama_kategori ?>">
                                                             </div>
+                                                            <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
                                                             <div class="col-sm-12 d-flex justify-content-end">
                                                                 <button type="submit" name="submit"
                                                                     class="btn btn-custom-submit me-1 mb-1">Update</button>
@@ -90,13 +94,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <form action="" method="POST" class="form-delete d-inline-block">
+                                    <form action="<?= base_url('dashboard/categories/delete/') . $category->id ?>" method="POST" class="form-delete d-inline-block">
+                                        <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />    
                                         <button type="submit" class="btn btn-danger btn-sm delete-item">
                                             <i class="fa-regular fa-trash-can"></i>
                                         </button>
                                     </form>
                                 </td>
                             </tr>
+                            <?php
+                            }
+                            ?>
                         </tbody>
                     </table>
                 </div>
@@ -111,12 +119,13 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form method="post" action="">
+                            <form method="post" action="<?= base_url('dashboard/categories/create') ?>">
                                 <div class="form-body">
                                     <div class="col-md-12 form-group">
                                         <label for="name">Name</label>
                                         <input type="text" id="name" class="form-control" name="name" required>
                                     </div>
+                                    <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
                                     <div class="col-sm-12 d-flex justify-content-end">
                                         <button type="submit" name="submit"
                                             class="btn btn-custom-submit me-1 mb-1">Submit</button>

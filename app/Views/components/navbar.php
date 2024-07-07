@@ -1,3 +1,7 @@
+<?php
+$auth = $role;
+?>
+
 <nav class="navbar navbar-expand-lg bg-white shadow-sm">
     <div class="container">
         <a class="navbar-brand fw-semibold fs-5" href="/">
@@ -10,14 +14,21 @@
 
         <div class="collapse navbar-collapse d-lg-flex align-items-center" id="navbarNav">
             <ul class="navbar-nav nav-underline d-md-none d-block mt-2">
+            <?php if ($auth == 'User') : ?>
                 <li class="nav-item me-2">
                     <a class="nav-link" href="/cart">Cart</i></a>
                 </li>
                 <li class="nav-item me-2">
-                    <a class="nav-link" href="/account">Profile</a>
-                </li>
-                <li class="nav-item me-2">
                     <a class="nav-link" href="/feedback">Ratings & Feedback</a>
+                </li>
+            <?php endif; ?>
+            <?php if ($auth == 'Admin') : ?>
+                <li class="nav-item me-2">
+                    <a class="nav-link" href="/dashboard">Dashboard</a>
+                </li>
+            <?php endif; ?>
+                <li class="nav-item me-2">
+                    <a class="nav-link" href="/account">Profile</a>
                 </li>
                 <li class="nav-item me-2">
                     <a class="nav-link" href="/logout">Logout</a>
@@ -36,22 +47,33 @@
             </form>
 
             <ul class="navbar-nav d-md-flex gap-1 d-none">
+            <?php if ($auth == 'User') : ?>
                 <li class="nav-item me-2">
                     <a class="nav-link" href="/cart"><i class="fa-solid fa-cart-shopping"></i></a>
                 </li>
+            <?php endif; ?>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                         <i class="fa-solid fa-circle-user fs-5"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <a class="dropdown-item" href="/account">
-                                <i class="fa-regular fa-user me-2"></i> Profile
-                            </a>
-                        </li>
+                        <?php if ($auth == 'User') : ?>
                         <li class="mb-2">
                             <a class="dropdown-item" href="/feedback">
                                 <i class="fa-regular fa-star me-1"></i> Ratings & Feedback
+                            </a>
+                        </li>
+                        <?php endif; ?>
+                        <?php if ($auth == 'Admin') : ?>
+                        <li class="mb-2">
+                            <a class="dropdown-item" href="/dashboard">
+                                <i class="fa fa-tachometer me-1"></i> Dashboard
+                            </a>
+                        </li>
+                        <?php endif; ?>
+                        <li>
+                            <a class="dropdown-item" href="/account">
+                                <i class="fa-regular fa-user me-2"></i> Profile
                             </a>
                         </li>
                         <li>
