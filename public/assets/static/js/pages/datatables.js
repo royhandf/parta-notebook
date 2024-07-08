@@ -1,7 +1,3 @@
-// let dataTable2 = new simpleDatatables.DataTable("#table2", {
-//   searchable: true,
-//   paging: true,
-// });
 
 
 let jquery_datatable = $("#table1").DataTable({
@@ -22,6 +18,7 @@ let customized_datatable = $("#table2").DataTable({
     searchPlaceholder: "Search..",
   },
 });
+
 
 const setTableColor = () => {
   document
