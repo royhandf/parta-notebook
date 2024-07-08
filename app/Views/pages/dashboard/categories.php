@@ -45,7 +45,7 @@
 
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="table2" class="display nowrap table" width="100%">
+                    <table id="table2" class="display table" width="100%">
                         <thead>
                             <tr>
                                 <th>No</th>
