@@ -6,7 +6,7 @@
     <div class="row gy-4 justify-content-center mb-4">
         <div class="col-md-9 col-11">
             <div class="p-4 bg-white rounded-4 shadow-sm">
-                <h2 class="text-black fw-semibold mb-3"><?= $product->nama_produk ?></h2>
+                <h2 class="text-black fw-semibold mb-3"><?= $detailproduct->nama_produk ?></h2>
 
                 <!-- image -->
                 <div class="mt-2 mb-4">
@@ -31,12 +31,12 @@
                     <div class="d-flex justify-content-between align-items-center p-4">
                         <div>
                             <h3 class="fw-semibold text-custom-red mb-3">
-                                Rp. <?= number_format($product->harga, 0, ',', '.') ?>
+                                Rp. <?= number_format($detailproduct->harga, 0, ',', '.') ?>
                             </h3>
                             <div class="d-flex gap-1">
                                 <i class="fa-solid fa-star text-warning"></i>
 
-                                <small class="text-muted">(<?= $product->rating ?>)</small>
+                                <small class="text-muted">(<?= $detailproduct->rating ?>)</small>
                             </div>
                         </div>
                         <button class="btn btn-custom-cart d-md-none d-inline" data-bs-toggle="modal"
@@ -55,7 +55,7 @@
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <p class="fw-medium text-black">Stock: <?= $product->stok ?></p>
+                                        <p class="fw-medium text-black">Stock: <?= $detailproduct->stok ?></p>
                                         <div class="input-group number-spinner rounded-3"
                                             style="background-color: #f5f5f5;">
                                             <span class="input-group-btn">
@@ -71,7 +71,7 @@
                                         <div class="d-lg-flex d-md-block d-flex justify-content-between">
                                             <p class="text-muted fw-medium mb-0">Price</p>
                                             <p class="text-black fw-medium mb-0">Rp.
-                                                <?= number_format($product->harga, 0, ',', '.') ?></p>
+                                                <?= number_format($detailproduct->harga, 0, ',', '.') ?></p>
                                         </div>
                                         <hr>
                                         <!-- masuk cart -->
@@ -88,15 +88,15 @@
                     Product Description
                 </h5>
                 <p class="text-black">
-                <?= $product->detail ?>
+                <?= $detailproduct->detail ?>
                 </p>
             </div>
         </div>
         <div class="col-md-3 col-11 d-md-block d-none">
             <div class="p-4 bg-white rounded-4 shadow-sm">
-            <form action="<?= base_url('/add-to-cart/') . $product->id ?>" method="POST">
+            <form action="<?= base_url('/add-to-cart/') . $detailproduct->id ?>" method="POST">
                 <h5 class="text-black fw-semibold mb-4">Checkout</h5>
-                <p class="fw-medium text-black">Stock: <?= $product->stok ?></p>
+                <p class="fw-medium text-black">Stock: <?= $detailproduct->stok ?></p>
                 <hr>
                 <div class="input-group number-spinner rounded-3" style="background-color: #f5f5f5;">
                     <span class="input-group-btn">
@@ -111,7 +111,7 @@
                 <hr>
                 <div class="d-lg-flex d-md-block d-flex justify-content-between">
                     <p class="text-muted fw-medium mb-0">Price</p>
-                    <p class="text-black fw-medium mb-0">Rp. <?= number_format($product->harga, 0, ',', '.') ?></p>
+                    <p class="text-black fw-medium mb-0">Rp. <?= number_format($detailproduct->harga, 0, ',', '.') ?></p>
                 </div>
                 <hr>
                 <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
@@ -283,31 +283,31 @@
                             </a>
                         </div>
                         <?php endforeach; ?>
-                        <?php else : ?>
-                            <?php foreach ($products as $product) : ?>
-                            <div class="swiper-slide">
-                                <a href="<?= base_url('/detail-product/') . $product->id ?>">
-                                    <div class="card shadow">
-                                        <div class="card-content">
-                                        <img src="<?= $product->images != null ? base_url('uploads/img-product/' . $product->images[0]->image) : base_url('assets/static/images/product.png') ?>" class="card-img-top img-fluid" alt="product" />
-                                            <div class="card-body px-3">
-                                                <p class="fw-semibold fs-custom-references mb-2 text-truncate">
-                                                <?= $product->nama_produk ?>
-                                                </p>
-                                                <div class="d-flex mb-2 align-items-center" style="font-size:10px">
-                                                    <i class="fa-solid fa-star text-warning"></i>
-                                                    <span class="text-muted fs-custom-references ms-1"
-                                                        style="font-size:10px">(<?= $product->rating ?>)</span>
-                                                </div>
-                                                <p class="fw-semibold text-custom-red fs-custom-references mb-0">
-                                                    Rp. <?= number_format($product->harga, 0, ',', '.') ?>
-                                                </p>
+                    <?php else : ?>
+                        <?php foreach ($products as $product) : ?>
+                        <div class="swiper-slide">
+                            <a href="<?= base_url('/detail-product/') . $product->id ?>">
+                                <div class="card shadow">
+                                    <div class="card-content">
+                                    <img src="<?= $product->images != null ? base_url('uploads/img-product/' . $product->images[0]->image) : base_url('assets/static/images/product.png') ?>" class="card-img-top img-fluid" alt="product" />
+                                        <div class="card-body px-3">
+                                            <p class="fw-semibold fs-custom-references mb-2 text-truncate">
+                                            <?= $product->nama_produk ?>
+                                            </p>
+                                            <div class="d-flex mb-2 align-items-center" style="font-size:10px">
+                                                <i class="fa-solid fa-star text-warning"></i>
+                                                <span class="text-muted fs-custom-references ms-1"
+                                                    style="font-size:10px">(<?= $product->rating ?>)</span>
                                             </div>
+                                            <p class="fw-semibold text-custom-red fs-custom-references mb-0">
+                                                Rp. <?= number_format($product->harga, 0, ',', '.') ?>
+                                            </p>
                                         </div>
                                     </div>
-                                </a>
-                            </div>
-                            <?php endforeach; ?>
+                                </div>
+                            </a>
+                        </div>
+                        <?php endforeach; ?>
                     <?php endif; ?>
                     </div>
                 </div>

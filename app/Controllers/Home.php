@@ -127,11 +127,12 @@ class Home extends BaseController
 
         $data = [
             'role' => session()->get('role'),
-            'product' => $detail,
+            'detailproduct' => $detail,
             'relatedproducts' => $relatedProducts,
             'products' => $products,
             'title' => 'Detail Product',
         ];
+
         return view('pages/user/detail-product', $data);
     }
 
