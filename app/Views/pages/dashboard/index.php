@@ -125,14 +125,8 @@
 
 <script src="<?= base_url('assets/extensions/chart.js/chart.umd.js') ?>"></script>
 <script>
-let productNames = [
-    "Product 1",
-    "Product 2",
-    "Product 3",
-    "Product 4",
-    "Product 5",
-];
-let productSales = [10, 20, 30, 40, 50];
+let productNames = <?= json_encode(array_column($top_sales, 'nama_produk')) ?>;
+let productSales = <?= json_encode(array_column($top_sales, 'total_qty')) ?>;
 
 const donut = document.getElementById("donut").getContext("2d");
 const myDonut = new Chart(donut, {
@@ -171,15 +165,22 @@ const myDonut = new Chart(donut, {
     },
 });
 
+let salesPerMonth = <?= json_encode($sales_per_month) ?>;
+let months = salesPerMonth.map((item) => {
+    return `${item.year}-${item.month}`;
+});
+
+let sales = salesPerMonth.map((item) => {
+    return item.total_qty;
+});
+    
 const bar = document.getElementById("bar").getContext("2d");
 const myBar = new Chart(bar, {
     type: "bar",
     data: {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov",
-            "Dec",
-        ],
+        labels: [...months],
         datasets: [{
-            data: [65, 59, 80, 81, 56, 55, 40, 60, 70, 80, 90, 100],
+            data: [...sales],
             backgroundColor: "#F90A45",
         }, ],
     },
