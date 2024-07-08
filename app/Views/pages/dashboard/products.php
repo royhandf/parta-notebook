@@ -47,7 +47,7 @@
 
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="table2" class="table table-striped">
+                    <table id="table2" class="display table" width="100%">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -62,11 +62,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                        <?php
-                            $no = 1;
-                            foreach ($products as $product) { ?>
+                        <?php foreach ($products as $key => $product) : ?>
                             <tr>
-                                <td> <?= $no++ ?> </td>
+                                <td> <?= $key + 1 ?> </td>
                                 <td> <?= $product->nama_produk ?> </td>
                                 <td> <?= $product->nama_kategori ?> </td>
                                 <td> <?= $product->berat ?> </td>
@@ -184,8 +182,7 @@
                                                                 </div>
                                                                 <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
                                                                 <div class="col-sm-12 d-flex justify-content-end">
-                                                                    <button type="submit" name="submit"
-                                                                        class="btn btn-custom-submit me-1 mb-1">Submit</button>
+                                                                    <button type="submit" name="submit"  class="btn btn-custom-submit me-1 mb-1">Submit</button>
                                                                 </div>
                                                             </div>
                                                         </form>
@@ -195,17 +192,16 @@
                                         </div>
 
                                         <form action="<?= base_url('dashboard/products/delete/') . $product->id ?>" method="post" class="form-delete d-inline-block">
-                                        <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
-                                        <button type="submit" class="btn btn-danger btn-sm delete-item">
+                                            <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
+                                            <button type="submit" class="btn btn-danger btn-sm delete-item">
                                                 <i class="fa-regular fa-trash-can"></i>
                                             </button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
+                        <?php endforeach; ?>
                         </tbody>
-                        <?php
-                        } ?>
                     </table>
                 </div>
             </div>
