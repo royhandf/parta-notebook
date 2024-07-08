@@ -5,7 +5,6 @@ $auth = $role;
 <nav class="navbar navbar-expand-lg bg-white shadow-sm">
     <div class="container">
         <a class="navbar-brand fw-semibold fs-5" href="/">
-            <!-- <img src="<?= base_url('assets/static/images/logo.jpg') ?>" alt="Logo" id="logo" width="50"> -->
             <span class="text-black">Parta.</span><span style="color: #F90A45;">Notebook</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -14,28 +13,33 @@ $auth = $role;
 
         <div class="collapse navbar-collapse d-lg-flex align-items-center" id="navbarNav">
             <ul class="navbar-nav nav-underline d-md-none d-block mt-2">
-            <?php if ($auth == 'User') : ?>
-                <li class="nav-item me-2">
-                    <a class="nav-link" href="/cart">Cart</i></a>
-                </li>
-                <li class="nav-item me-2">
-                    <a class="nav-link" href="/feedback">Ratings & Feedback</a>
-                </li>
-            <?php endif; ?>
-            <?php if ($auth == 'Admin') : ?>
-                <li class="nav-item me-2">
-                    <a class="nav-link" href="/dashboard">Dashboard</a>
-                </li>
-            <?php endif; ?>
-                <li class="nav-item me-2">
-                    <a class="nav-link" href="/account">Profile</a>
-                </li>
-                <li class="nav-item me-2">
-                    <a class="nav-link" href="/logout">Logout</a>
-                </li>
+                <?php if ($auth == null) : ?>
+                    <li class="nav-item me-2">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                <?php else : ?>
+                    <?php if ($auth == 'User') : ?>
+                        <li class="nav-item me-2">
+                            <a class="nav-link" href="/cart">Cart</i></a>
+                        </li>
+                        <li class="nav-item me-2">
+                            <a class="nav-link" href="/feedback">Ratings & Feedback</a>
+                        </li>
+                    <?php endif; ?>
+                    <?php if ($auth == 'Admin') : ?>
+                        <li class="nav-item me-2">
+                            <a class="nav-link" href="/dashboard">Dashboard</a>
+                        </li>
+                    <?php endif; ?>
+                    <li class="nav-item me-2">
+                        <a class="nav-link" href="/account">Profile</a>
+                    </li>
+                    <li class="nav-item me-2">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                <?php endif; ?>
             </ul>
 
-            <!-- PENCARIAN PRODUK DAN AKAN PINDAH KE HALAMAN GALLERY PRODUCTS -->
             <form class="d-md-flex d-block mx-auto mt-md-0 mt-3" role="search" action="">
                 <div class="input-group search-bar">
                     <input type="text" class="form-control input-search" placeholder="Search for products">
@@ -45,6 +49,9 @@ $auth = $role;
                 </div>
             </form>
 
+           <?php if ($auth == null) : ?>
+                <a href="/login" class="btn btn-custom-primary d-md-block d-none">Login</a>
+            <?php else : ?>
             <ul class="navbar-nav d-md-flex gap-1 d-none">
             <?php if ($auth == 'User') : ?>
                 <li class="nav-item me-2">
@@ -57,14 +64,14 @@ $auth = $role;
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <?php if ($auth == 'User') : ?>
-                        <li class="mb-2">
+                        <li>
                             <a class="dropdown-item" href="/feedback">
                                 <i class="fa-regular fa-star me-1"></i> Ratings & Feedback
                             </a>
                         </li>
                         <?php endif; ?>
                         <?php if ($auth == 'Admin') : ?>
-                        <li class="mb-2">
+                        <li>
                             <a class="dropdown-item" href="/dashboard">
                                 <i class="fa fa-tachometer me-1"></i> Dashboard
                             </a>
@@ -83,6 +90,7 @@ $auth = $role;
                     </ul>
                 </li>
             </ul>
+            <?php endif; ?>
         </div>
     </div>
 </nav>
