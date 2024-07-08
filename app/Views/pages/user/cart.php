@@ -14,7 +14,7 @@
                     <hr class="text-black" style="width: 50px;">
                     <p class="fw-medium fs-custom-paragraph text-muted fs-6 mb-0">Payment</p>
                 </div>
-                <div class="d-flex justify-content-md-between justify-content-center">
+                <div class="d-flex justify-content-md-between justify-content-center flex-column">
                     <?php if (!$carts) : ?>
                     <div class="text-center">
                         <h3 class="text-black fw-semibold mb-3">Cart is empty</h3>
