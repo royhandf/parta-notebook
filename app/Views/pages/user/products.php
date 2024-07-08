@@ -37,8 +37,7 @@
                                                 Category
                                             </button>
                                             <ul id="collapseCategories" class="collapse list-unstyled mt-2">
-                                                <?php
-                        foreach ($categories as $category) { ?>
+                                                <?php  foreach ($categories as $category) : ?>
                                                 <li>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio" name="category"
@@ -48,9 +47,7 @@
                                                         </label>
                                                     </div>
                                                 </li>
-                                                <?php
-                        }
-                        ?>
+                                                <?php endforeach; ?>
                                             </ul>
                                         </div>
 
@@ -133,14 +130,14 @@
                 </div>
                 <div class="row justify-content-start">
                     <?php foreach ($products as $product) { ?>
-                    <div class="col-md-4 col-6">
+                    <div class="col-md-4 col-6 list-products">
                         <a href="<?= base_url('/detail-product/'. $product->id) ?>">
                             <div class="card shadow">
                                 <div class="card-content">
                                     <img src="<?= $product->images != null ? base_url('uploads/img-product/' . $product->images->image) : base_url('assets/static/images/product.png') ?>"
                                         class="card-img-top p-3" alt="product" style="background: #f5f5f5" />
                                     <div class="card-body px-3">
-                                        <p class="fw-semibold mb-2 text-truncate">
+                                        <p class="fw-semibold mb-2 text-truncate title-products">
                                         <?= $product->nama_produk ?>
                                         </p>
                                         <div class="d-flex mb-2 align-items-center" style="font-size:10px">
@@ -190,17 +187,17 @@
                             Category
                         </button>
                         <ul id="collapseCategories" class="collapse list-unstyled mt-2">
-                        <?php foreach ($categories as $category) { ?>
-                                                <li>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="category"
-                                                            value="<?= $category->id ?>" id="<?= $category->id ?>">
-                                                        <label class="form-check-label" for="<?= $category->id ?>">
-                                                            <?= $category->nama_kategori ?>
-                                                        </label>
-                                                    </div>
-                                                </li>
-                        <?php } ?>
+                        <?php foreach ($categories as $category) : ?>
+                            <li>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="category"
+                                        value="<?= $category->id ?>" id="<?= $category->id ?>">
+                                    <label class="form-check-label" for="<?= $category->id ?>">
+                                        <?= $category->nama_kategori ?>
+                                    </label>
+                                </div>
+                            </li>
+                        <?php endforeach; ?>
                         </ul>
                     </div>
 

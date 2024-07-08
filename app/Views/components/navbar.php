@@ -38,8 +38,7 @@ $auth = $role;
             <!-- PENCARIAN PRODUK DAN AKAN PINDAH KE HALAMAN GALLERY PRODUCTS -->
             <form class="d-md-flex d-block mx-auto mt-md-0 mt-3" role="search" action="">
                 <div class="input-group search-bar">
-                    <input type="text" class="form-control" placeholder="Search for products"
-                        aria-label="Search for products">
+                    <input type="text" class="form-control input-search" placeholder="Search for products">
                     <button class="btn btn-custom-search" type="button" id="search-products">
                         <i class="fa-solid fa-search"></i>
                     </button>
