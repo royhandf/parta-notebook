@@ -241,7 +241,8 @@
                                         <label for="stock">Stock</label>
                                         <input type="int" id="stock" class="form-control" name="stock" required>
                                     </div>
-                                        <label for="weight">Weight</label>
+                                    <div class="col-md-12 form-group">
+                                        <label for="weight">Weight (gram)</label>
                                         <input type="text" id="weight" class="form-control" name="weight" required>
                                     </div>
                                     <div class="col-md-12 form-group">

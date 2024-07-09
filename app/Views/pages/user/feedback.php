@@ -60,13 +60,12 @@
                                                                 <textarea class="form-control border-dark border-opacity-25"
                                                                     id="review-<?= $index ?>" name="review" rows="3" <?= $detail->reviews != null ? 'disabled' : '' ?>><?= $detail->reviews != null ? esc($detail->reviews->description) : '' ?></textarea>
                                                             </div>
+                                                            <input type="hidden" name="transaction_id" value="<?= esc($detail->transaction_id) ?>" />
                                                             <input type="hidden" name="product_id" value="<?= esc($detail->products->id) ?>" />
                                                             <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
-                                                            <?php if ($detail->reviews == null) { ?>
                                                                 <button type="submit" name="submit" class="btn btn-custom-submit w-100">
                                                                     Submit Review
                                                                 </button>
-                                                            <?php } ?>
                                                         </form>
                                                     </div>
                                                 </div>

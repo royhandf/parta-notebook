@@ -21,6 +21,10 @@ class ReviewMigration extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 32
             ],
+            'transaction_id' => [
+                'type' => 'VARCHAR',
+                'constraint' => 32
+            ],
             'star' => [
                 'type' => 'INT',
                 'default' => 0
@@ -33,6 +37,7 @@ class ReviewMigration extends Migration
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('product_id', 'products', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('transaction_id', 'transactions', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('reviews', TRUE);
     }
 

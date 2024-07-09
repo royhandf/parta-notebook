@@ -51,7 +51,8 @@ class ProductController extends BaseController
             'category_id' => $this->request->getPost('category'),
             'detail' => $this->request->getPost('detail'),
             'stok' => $this->request->getPost('stock'),
-            'harga' => $this->request->getPost('price')
+            'harga' => $this->request->getPost('price'),
+            'berat' => $this->request->getPost('weight'),
         ]);
 
         $images = $this->request->getFileMultiple('images');
@@ -86,7 +87,8 @@ class ProductController extends BaseController
             'category_id' => $this->request->getPost('category'),
             'detail' => $this->request->getPost('detail'),
             'stok' => $this->request->getPost('stock'),
-            'harga' => $this->request->getPost('price')
+            'harga' => $this->request->getPost('price'),
+            'berat' => $this->request->getPost('weight'),
         ]);
 
         $images = $this->request->getFileMultiple('images');

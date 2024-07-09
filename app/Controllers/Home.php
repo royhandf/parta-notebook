@@ -109,7 +109,7 @@ class Home extends BaseController
             ->findAll();
 
         foreach ($relatedProducts as $key => $related) {
-            $relatedProducts[$key]->image = $this->productImages->select('image')
+            $relatedProducts[$key]->images = $this->productImages->select('image')
                 ->where('product_id', $related->id)
                 ->first();
         }
@@ -125,9 +125,12 @@ class Home extends BaseController
                 ->findAll();
         }
 
+        // dd($detail);
+        // dd($detail->images);
+
         $data = [
             'role' => session()->get('role'),
-            'detailproduct' => $detail,
+            'detailproducts' => $detail,
             'relatedproducts' => $relatedProducts,
             'products' => $products,
             'title' => 'Detail Product',
@@ -281,6 +284,14 @@ class Home extends BaseController
             $subtotal += $cart->total_harga;
         }
 
+        // decrease stock
+        foreach ($carts as $cart) {
+            $product = $this->products->find($cart->product_id);
+            $this->products->update($product->id, [
+                'stok' => $product->stok - $cart->qty,
+            ]);
+        }
+
         $ongkir = 20000;
 
         $total = $subtotal + $ongkir;
@@ -429,14 +440,19 @@ class Home extends BaseController
         $userid = session()->get('id');
         $number = 5;
 
-        $transactions = $this->transactions->where('user_id', $userid)->findAll();
+        $transactions = $this->transactions->where('user_id', $userid)
+        ->orderBy('created_at', 'DESC')
+        ->findAll();
         $details = [];
         foreach ($transactions as $transaction) {
             $detail = $this->detailTransactions->where('transaction_id', $transaction->id)->findAll();
             foreach ($detail as $item) {
                 $item->transactions = $transaction;
                 $item->products = $this->products->find($item->product_id);
-                $item->reviews = $this->reviews->where('user_id', $userid)->where('product_id', $item->product_id)->first();
+                $item->reviews = $this->reviews->where('user_id', $userid)
+                ->where('transaction_id', $transaction->id)
+                ->where('product_id', $item->product_id)
+                ->first();
                 $item->images = $this->productImages->select('image')->where('product_id', $item->product_id)->first();
                 $details[] = $item;
             }
@@ -458,10 +474,14 @@ class Home extends BaseController
     {
         $userid = session()->get('id');
         $productid = $this->request->getPost('product_id');
+        $transactionid = $this->request->getPost('transaction_id'); 
         $star = $this->request->getPost('rating');
 
         // check if user already give feedback it can update
-        $review = $this->reviews->where('user_id', $userid)->where('product_id', $productid)->first();
+        $review = $this->reviews->where('user_id', $userid)
+        ->where('product_id', $productid)
+        ->where('transaction_id', $transactionid)
+        ->first();
         if ($review) {
             $this->reviews->update($review->id, [
                 'star' => $star,
@@ -488,6 +508,7 @@ class Home extends BaseController
             'id' => Uuid::uuid4(),
             'user_id' => $userid,
             'product_id' => $productid,
+            'transaction_id' => $transactionid,
             'star' => $star,
             'description' => $this->request->getPost('review'),
         ]);
