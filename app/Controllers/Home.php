@@ -125,14 +125,80 @@ class Home extends BaseController
                 ->findAll();
         }
 
+        $reviewuser = $this->reviews
+        ->where('product_id', $id)
+        ->orderBy('created_at', 'DESC')
+        ->findAll();
+        foreach ($reviewuser as $key => $review) {
+            $reviewuser[$key]->users = $this->userModel->find($review->user_id);
+        }
+
+        $review5star = $this->reviews
+        ->where('product_id', $id)
+        ->where('star', 5)
+        ->orderBy('created_at', 'DESC')
+        ->findAll();
+        foreach ($review5star as $key => $review) {
+            $review5star[$key]->users = $this->userModel->find($review->user_id);
+        }
+
+        $review4star = $this->reviews
+        ->where('product_id', $id)
+        ->where('star', 4)
+        ->orderBy('created_at', 'DESC')
+        ->findAll();
+        foreach ($review4star as $key => $review) {
+            $review4star[$key]->users = $this->userModel->find($review->user_id);
+        }
+
+        $review3star = $this->reviews
+        ->where('product_id', $id)
+        ->where('star', 3)
+        ->orderBy('created_at', 'DESC')
+        ->findAll();
+        foreach ($review3star as $key => $review) {
+            $review3star[$key]->users = $this->userModel->find($review->user_id);
+        }
+
+        $review2star = $this->reviews
+        ->where('product_id', $id)
+        ->where('star', 2)
+        ->orderBy('created_at', 'DESC')
+        ->findAll();
+        foreach ($review2star as $key => $review) {
+            $review2star[$key]->users = $this->userModel->find($review->user_id);
+        }
+
+        $review1star = $this->reviews
+        ->where('product_id', $id)
+        ->where('star', 1)
+        ->orderBy('created_at', 'DESC')
+        ->findAll();
+        foreach ($review1star as $key => $review) {
+            $review1star[$key]->users = $this->userModel->find($review->user_id);
+        }
+
         // dd($detail);
         // dd($detail->images);
+        // dd($reviewuser);
 
         $data = [
             'role' => session()->get('role'),
             'detailproducts' => $detail,
             'relatedproducts' => $relatedProducts,
             'products' => $products,
+            'reviewusers' => $reviewuser,
+            'review5stars' => $review5star,
+            'review4stars' => $review4star,
+            'review3stars' => $review3star,
+            'review2stars' => $review2star,
+            'review1stars' => $review1star,
+            'totalreviews' => count($reviewuser),
+            'total5stars' => count($review5star),
+            'total4stars' => count($review4star),
+            'total3stars' => count($review3star),
+            'total2stars' => count($review2star),
+            'total1stars' => count($review1star),
             'title' => 'Detail Product',
         ];
 
