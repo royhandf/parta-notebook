@@ -45,7 +45,46 @@
                         </div>
                         <div class="col-md-9 col-7">
                             <input type="text" class="form-control border-dark border-opacity-25" id="alamat" name="alamat" value="<?= $user->alamat ?>"
-                                placeholder="Insert your address">
+                                placeholder="Contoh: Jl. Mawar No.3, Kec. Bunga (hanya sampai kecamatan)">
+                        </div>
+                    </div>
+                    <div class="row align-items-center mb-4">
+                        <div class="col-md-3 col-5">
+                            <label for="city" class="form-label">Kota/Kabupaten</label>
+                        </div>
+                        <div class="col-md-9 col-7">
+                        <select class="form-control select2 border-dark border-opacity-25" id="kota_id" name="kota_id">
+                            <option value="">Pilih Kota/Kabupaten</option>
+                            <?php foreach ($kota->rajaongkir->results as $city): ?>
+                                <option value="<?= $city->city_id ?>" <?= $user->kota_id == $city->city_id ? 'selected' : '' ?>>
+                                <?= $city->type ?> <?= $city->city_name ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        </div>
+                    </div>
+                    <div class="row align-items-center mb-4">
+                        <div class="col-md-3 col-5">
+                            <label for="province" class="form-label">Provinsi</label>
+                        </div>
+                        <div class="col-md-9 col-7">
+                        <select class="form-control select2 border-dark border-opacity-25" id="provinsi_id" name="provinsi_id">
+                            <option value="">Pilih Provinsi</option>
+                            <?php foreach ($provinsi->rajaongkir->results as $province): ?>
+                                <option value="<?= $province->province_id ?>" <?= $user->provinsi_id == $province->province_id ? 'selected' : '' ?>>
+                                <?= $province->province ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        </div>
+                    </div>
+                    <div class="row align-items-center mb-4">
+                        <div class="col-md-3 col-5">
+                            <label for="postal_code" class="form-label">Kode Pos</label>
+                        </div>
+                        <div class="col-md-9 col-7">
+                            <input type="text" class="form-control border-dark border-opacity-25" id="kodepos" name="kodepos" value="<?= $user->kode_pos ?>"
+                                placeholder="Insert your postal code">
                         </div>
                     </div>
                     <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />

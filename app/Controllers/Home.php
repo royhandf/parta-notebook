@@ -22,6 +22,7 @@ class Home extends BaseController
     protected $transactions;
     protected $detailTransactions;
     protected $reviews;
+    public $api_key;
 
     public function __construct()
     {
@@ -33,6 +34,7 @@ class Home extends BaseController
         $this->transactions = new TransactionModel();
         $this->detailTransactions = new DetailTransactionModel();
         $this->reviews = new ReviewModel();
+        $this->api_key = "8af4f5a67bce98e321dd8885600a3278";
     }
 
     public function index(): string
@@ -70,9 +72,14 @@ class Home extends BaseController
 
     public function products(): string
     {
+        $perPage = 12; // Number of products per page
+        $currentPage = $this->request->getVar('page') ?? 1; // Get the current page from the query string, default to 1
+
+        $totalProducts = $this->products->countAllResults(); // Get the total number of products
         $products = $this->products->select('products.*, categories.nama_kategori')
             ->join('categories', 'categories.id = products.category_id')
-            ->findAll();
+            ->orderBy('created_at', 'DESC')
+            ->findAll($perPage, ($currentPage - 1) * $perPage); // Fetch products for the current page
 
         foreach ($products as $key => $product) {
             $products[$key]->images = $this->productImages->select('image')
@@ -85,6 +92,8 @@ class Home extends BaseController
             'products' => $products,
             'categories' => $this->categories->findAll(),
             'title' => 'Products',
+            'currentPage' => $currentPage,
+            'totalPages' => ceil($totalProducts / $perPage),
         ];
 
         return view('pages/user/products', $data);
@@ -205,7 +214,7 @@ class Home extends BaseController
         return view('pages/user/detail-product', $data);
     }
 
-    public function cart(): string
+    public function cart()
     {
         $userId = session()->get('id');
         $cartcustomer = $this->carts->where('user_id', $userId)->findAll();
@@ -299,10 +308,26 @@ class Home extends BaseController
         return redirect()->to('/checkout');
     }
 
-    public function checkout(): string
+    public function checkout()
     {
+        $api_key = $this->api_key;
+
         $userId = session()->get('id');
         $user = $this->userModel->where('id', $userId)->first();
+        if ( empty($user->alamat)) {
+            session()->setFlashdata('error', 'Address must be filled!');
+            return redirect()->to('/account');
+        } else if ( empty($user->kota_id)) {
+            session()->setFlashdata('error', 'City must be filled!');
+            return redirect()->to('/account');
+        } else if ( empty($user->provinsi_id)) {
+            session()->setFlashdata('error', 'Province must be filled!');
+            return redirect()->to('/account');
+        } else if ( empty($user->kode_pos)) {
+            session()->setFlashdata('error', 'Postal code must be filled!');
+            return redirect()->to('/account');
+        } 
+
         $carts = $this->carts->where('user_id', $userId)->findAll();
 
         // Retrieve product details for each cart item
@@ -316,9 +341,109 @@ class Home extends BaseController
             $subtotal += $cart->total_harga;
         }
 
-        $ongkir = 20000;
+        $totalWeight = 0;
+        foreach ($carts as $cart) {
+            $totalWeight += $cart->product->berat * $cart->qty;
+        }
+
+        $origin = $this->userModel->where('role', 'admin')->first();
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.rajaongkir.com/starter/cost",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "origin=".$origin->kota_id."&destination=".$user->kota_id."&weight=".$totalWeight."&courier=jne",
+            CURLOPT_HTTPHEADER => array(
+              "content-type: application/x-www-form-urlencoded",
+              "key:".$api_key
+            ),
+          ));
+          
+          $response = curl_exec($curl);
+          $err = curl_error($curl);
+          
+          curl_close($curl);
+
+        if ($err) {
+            $data['hasil'] = array('status' => 'error', 'message' => 'error');
+        } else {
+            $response_data = json_decode($response);
+            if (isset($response_data->rajaongkir->results[0]->costs)) {
+                $costs = $response_data->rajaongkir->results[0]->costs;
+                $reg_service = null;
+        
+                foreach ($costs as $cost) {
+                    if ($cost->service == "REG") {
+                        $reg_service = $cost;
+                        break;
+                    }
+                }
+        
+                if ($reg_service) {
+                    $data['hasil'] = array(
+                        'value' => $reg_service->cost[0]->value,
+                        'etd' => $reg_service->cost[0]->etd
+                    );
+                }
+            }
+        }
+
+        $ongkir = $data['hasil']['value'];
+        $estimasi = $data['hasil']['etd'];
 
         $total = $subtotal + $ongkir;
+
+        $totalberat = $totalWeight/1000;
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://api.rajaongkir.com/starter/city?id=".$user->kota_id."&province=". $user->provinsi_id,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => array(
+            "key: ".$api_key,
+        ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            $data['kota'] = array('status' => 'error', 'message' => 'error');
+        } else {
+            $response_data = json_decode($response);
+            if (isset($response_data->rajaongkir->results)) {
+                $result = $response_data->rajaongkir->results;
+                $type = $result->type;
+                $province = $result->province;
+                $city = $result->city_name;
+                $city_with_type = $type . " " . $city;
+
+                $data['kota'] = array(
+                    'province' => $province,
+                    'city' => $city_with_type
+                );
+            }
+        }
+
+        if (empty($data['kota']['city'])) {
+            $data['kota']['city'] = "City not set";
+        }
+        if (empty($data['kota']['province'])) {
+            $data['kota']['province']= "Province not set";
+        }
 
         $data = [
             'role' => session()->get('role'),
@@ -328,6 +453,11 @@ class Home extends BaseController
             'subtotal' => $subtotal,
             'ongkir' => $ongkir,
             'total' => $total,
+            'estimasi'=> $estimasi,
+            'totalberat'=> $totalberat,
+            'city'=> $data['kota']['city'],
+            'province'=> $data['kota']['province'],
+            'kodepos'=> $user->kode_pos,
         ];
 
         return view('pages/user/checkout', $data);
@@ -335,20 +465,90 @@ class Home extends BaseController
 
     public function storeTransaction()
     {
+        $api_key = $this->api_key;
         $userId = session()->get('id');
         $user = $this->userModel->where('id', $userId)->first();
 
-        if ($user->alamat == null && $user->no_telp == null) {
-            session()->setFlashdata('error', 'Address and phone number must be filled!');
+        if ( empty($user->alamat)) {
+            session()->setFlashdata('error', 'Address must be filled!');
+            return redirect()->to('/account');
+        } else if ( empty($user->kota_id)) {
+            session()->setFlashdata('error', 'City must be filled!');
+            return redirect()->to('/account');
+        } else if ( empty($user->provinsi_id)) {
+            session()->setFlashdata('error', 'Province must be filled!');
+            return redirect()->to('/account');
+        } else if ( empty($user->kode_pos)) {
+            session()->setFlashdata('error', 'Postal code must be filled!');
             return redirect()->to('/account');
         }
 
         $carts = $this->carts->where('user_id', $userId)->findAll();
 
+        // Retrieve product details for each cart item
+        foreach ($carts as $cart) {
+            $cart->product = $this->products->find($cart->product_id);
+            $cart->image = $this->productImages->select('image')->where('product_id', $cart->product_id)->first();
+        }
+
         $subtotal = 0;
         foreach ($carts as $cart) {
             $subtotal += $cart->total_harga;
         }
+
+        $totalWeight = 0;
+        foreach ($carts as $cart) {
+            $totalWeight += $cart->product->berat * $cart->qty;
+        }
+
+        $origin = $this->userModel->where('role', 'admin')->first();
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.rajaongkir.com/starter/cost",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "origin=".$origin->kota_id."&destination=".$user->kota_id."&weight=".$totalWeight."&courier=jne",
+            CURLOPT_HTTPHEADER => array(
+              "content-type: application/x-www-form-urlencoded",
+              "key:".$api_key,
+            ),
+          ));
+          
+          $response = curl_exec($curl);
+          $err = curl_error($curl);
+          
+          curl_close($curl);
+
+        if ($err) {
+            $data['hasil'] = array('status' => 'error', 'message' => 'error');
+        } else {
+            $response_data = json_decode($response);
+            if (isset($response_data->rajaongkir->results[0]->costs)) {
+                $costs = $response_data->rajaongkir->results[0]->costs;
+                $reg_service = null;
+        
+                foreach ($costs as $cost) {
+                    if ($cost->service == "REG") {
+                        $reg_service = $cost;
+                        break;
+                    }
+                }
+        
+                if ($reg_service) {
+                    $data['hasil'] = array(
+                        'value' => $reg_service->cost[0]->value,
+                        'etd' => $reg_service->cost[0]->etd
+                    );
+                }
+            }
+        }
+
+        $ongkir = $data['hasil']['value'];
 
         // decrease stock
         foreach ($carts as $cart) {
@@ -358,14 +558,13 @@ class Home extends BaseController
             ]);
         }
 
-        $ongkir = 20000;
-
         $total = $subtotal + $ongkir;
 
         $data = [
             'id' => Uuid::uuid4(),
             'user_id' => $userId,
             'kode_transaksi' => 'INV/' . date('Ymd') . '/' . date('his') . '/' . rand(100, 999),
+            'ongkir' => $ongkir,
             'total_bayar' => $total,
             'status' => 'pending',
         ];
@@ -391,6 +590,7 @@ class Home extends BaseController
 
     public function payment()
     {
+        $api_key = $this->api_key;
         $admin = $this->userModel->where('role', 'admin')->first();
         $userId = session()->get('id');
         $user = $this->userModel->where('id', $userId)->first();
@@ -407,7 +607,100 @@ class Home extends BaseController
             $item->product = $this->products->find($item->product_id);
         }
 
-        $ongkir = 20000;
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://api.rajaongkir.com/starter/city?id=".$user->kota_id."&province=". $user->provinsi_id,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => array(
+            "key: ".$api_key,
+        ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            $data['kota_user'] = array('status' => 'error', 'message' => 'error');
+        } else {
+            $response_data = json_decode($response);
+            if (isset($response_data->rajaongkir->results)) {
+                $result = $response_data->rajaongkir->results;
+                $type = $result->type;
+                $province = $result->province;
+                $city = $result->city_name;
+                $city_with_type = $type . " " . $city;
+
+                $data['kota_user'] = array(
+                    'province' => $province,
+                    'city' => $city_with_type
+                );
+            }
+        }
+
+        if (empty($data['kota_user']['city'])) {
+            $data['kota']['city'] = "City not set";
+        }
+        if (empty($data['kota_user']['province'])) {
+            $data['kota']['province']= "Province not set";
+        }
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://api.rajaongkir.com/starter/city?id=".$admin->kota_id."&province=". $admin->provinsi_id,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => array(
+            "key: ".$api_key,
+        ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            $data['kota_admin'] = array('status' => 'error', 'message' => 'error');
+        } else {
+            $response_data = json_decode($response);
+            if (isset($response_data->rajaongkir->results)) {
+                $result = $response_data->rajaongkir->results;
+                $type = $result->type;
+                $province = $result->province;
+                $city = $result->city_name;
+                $city_with_type = $type . " " . $city;
+
+                $data['kota_admin'] = array(
+                    'province' => $province,
+                    'city' => $city_with_type
+                );
+            }
+        }
+
+        if (empty($data['kota_admin']['city'])) {
+            $data['kota']['city'] = "City not set";
+        }
+        if (empty($data['kota_admin']['province'])) {
+            $data['kota']['province']= "Province not set";
+        }
+
+        $totalWeight = 0;
+        foreach ($detail as $dtl) {
+            $totalWeight += $dtl->product->berat * $dtl->qty;
+        }
 
         $data = [
             'role' => session()->get('role'),
@@ -416,7 +709,14 @@ class Home extends BaseController
             'details' => $detail,
             'admin' => $admin,
             'user' => $user,
-            'ongkir' => $ongkir,
+            'ongkir' => $transaction->ongkir,
+            'kota_user'=> $data['kota_user']['city'],
+            'provinsi_user'=> $data['kota_user']['province'],
+            'kodepos_user'=> $user->kode_pos,
+            'kota_admin'=> $data['kota_admin']['city'],
+            'provinsi_admin'=> $data['kota_admin']['province'],
+            'kodepos_admin'=> $admin->kode_pos,
+            'berat' => $totalWeight
         ];
 
         return view('pages/user/payment', $data);
@@ -457,14 +757,70 @@ class Home extends BaseController
     }
 
 
-    public function account(): string
+    public function account()
     {
+        $api_key = $this->api_key;
+        
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://api.rajaongkir.com/starter/city",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => array(
+            "key: ".$api_key,
+        ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            $data['kota'] = array('status' => 'error', 'message' => 'error');
+        } else {
+            $data['kota'] = json_decode($response);
+        }
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://api.rajaongkir.com/starter/province",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => array(
+            "key: ".$api_key,
+        ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            $data['provinsi'] = array('status' => 'error', 'message' => 'error');
+        } else {
+            $data['provinsi'] = json_decode($response);
+        }
+        
         $id = session()->get('id');
         $user = $this->userModel->where('id', $id)->first();
         $data = [
             'role' => session()->get('role'),
             'title' => 'Account',
             'user' => $user,
+            'kota' => $data['kota'],
+            'provinsi' => $data['provinsi'],
         ];
 
         return view('pages/user/account', $data);
@@ -478,6 +834,9 @@ class Home extends BaseController
             'email' => $this->request->getPost('email'),
             'no_telp' => $this->request->getPost('no_telp'),
             'alamat' => $this->request->getPost('alamat'),
+            'kota_id' => $this->request->getPost('kota_id'),
+            'provinsi_id' => $this->request->getPost('provinsi_id'),
+            'kode_pos' => $this->request->getPost('kodepos'),
         ]);
 
         session()->setFlashdata('success', 'Data has been updated!');
@@ -597,6 +956,8 @@ class Home extends BaseController
 
     public function detailTransaction($id)
     {
+        $api_key = $this->api_key;
+
         $userId = session()->get('id');
         $user = $this->userModel->where('id', $userId)->first();
         $admin = $this->userModel->where('role', 'admin')->first();
@@ -607,7 +968,100 @@ class Home extends BaseController
             $detail->product = $this->products->find($detail->product_id);
         }
 
-        $ongkir = 20000;
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://api.rajaongkir.com/starter/city?id=".$user->kota_id."&province=". $user->provinsi_id,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => array(
+            "key: ".$api_key,
+        ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            $data['kota_user'] = array('status' => 'error', 'message' => 'error');
+        } else {
+            $response_data = json_decode($response);
+            if (isset($response_data->rajaongkir->results)) {
+                $result = $response_data->rajaongkir->results;
+                $type = $result->type;
+                $province = $result->province;
+                $city = $result->city_name;
+                $city_with_type = $type . " " . $city;
+
+                $data['kota_user'] = array(
+                    'province' => $province,
+                    'city' => $city_with_type
+                );
+            }
+        }
+
+        if (empty($data['kota_user']['city'])) {
+            $data['kota']['city'] = "City not set";
+        }
+        if (empty($data['kota_user']['province'])) {
+            $data['kota']['province']= "Province not set";
+        }
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://api.rajaongkir.com/starter/city?id=".$admin->kota_id."&province=". $admin->provinsi_id,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => array(
+            "key: ".$api_key,
+        ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            $data['kota_admin'] = array('status' => 'error', 'message' => 'error');
+        } else {
+            $response_data = json_decode($response);
+            if (isset($response_data->rajaongkir->results)) {
+                $result = $response_data->rajaongkir->results;
+                $type = $result->type;
+                $province = $result->province;
+                $city = $result->city_name;
+                $city_with_type = $type . " " . $city;
+
+                $data['kota_admin'] = array(
+                    'province' => $province,
+                    'city' => $city_with_type
+                );
+            }
+        }
+
+        if (empty($data['kota_admin']['city'])) {
+            $data['kota']['city'] = "City not set";
+        }
+        if (empty($data['kota_admin']['province'])) {
+            $data['kota']['province']= "Province not set";
+        }
+
+        $totalWeight = 0;
+        foreach ($details as $dtl) {
+            $totalWeight += $dtl->product->berat * $dtl->qty;
+        }
 
         $data = [
             'role' => session()->get('role'),
@@ -616,9 +1070,146 @@ class Home extends BaseController
             'details' => $details,
             'admin' => $admin,
             'user' => $user,
-            'ongkir' => $ongkir,
+            'ongkir' => $transaction->ongkir,
+            'kota_user'=> $data['kota_user']['city'],
+            'provinsi_user'=> $data['kota_user']['province'],
+            'kodepos_user'=> $user->kode_pos,
+            'kota_admin'=> $data['kota_admin']['city'],
+            'provinsi_admin'=> $data['kota_admin']['province'],
+            'kodepos_admin'=> $admin->kode_pos,
+            'berat' => $totalWeight,
         ];
 
         return view('pages/user/detail-transaction', $data);
+    }
+
+    public function responseCity()
+    {
+        $api_key = $this->api_key;
+        
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://api.rajaongkir.com/starter/city",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => array(
+            "key: ".$api_key,
+        ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            $data['kota'] = array('status' => 'error', 'message' => 'error');
+        } else {
+            $data['kota'] = json_decode($response);
+        }
+        print_r($data);
+
+        return $data;
+    }
+
+    public function responseProvince()
+    {
+        $api_key = $this->api_key;
+        
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://api.rajaongkir.com/starter/province",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => array(
+            "key: ".$api_key,
+        ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            $data['provinsi'] = array('status' => 'error', 'message' => 'error');
+        } else {
+            $data['provinsi'] = json_decode($response);
+        }
+        print_r($data);
+
+        return $data;
+    }
+
+    public function responseCost()
+    {
+        $api_key = $this->api_key;
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.rajaongkir.com/starter/cost",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "origin=501&destination=114&weight=1700&courier=jne",
+            CURLOPT_HTTPHEADER => array(
+              "content-type: application/x-www-form-urlencoded",
+              "key:".$api_key
+            ),
+          ));
+          
+          $response = curl_exec($curl);
+          $err = curl_error($curl);
+          
+          curl_close($curl);
+
+        if ($err) {
+            $data['hasil'] = array('status' => 'error', 'message' => 'error');
+        } else {
+            $response_data = json_decode($response);
+
+            if (isset($response_data->rajaongkir->results[0]->costs)) {
+                $costs = $response_data->rajaongkir->results[0]->costs;
+                $reg_service = null;
+        
+                foreach ($costs as $cost) {
+                    if ($cost->service == "REG") {
+                        $reg_service = $cost;
+                        break;
+                    }
+                }
+        
+                if ($reg_service) {
+                    $data['hasil'] = array(
+                        'rajaongkir' => array(
+                            'results' => array(
+                                array(
+                                    'costs' => array($reg_service)
+                                )
+                            )
+                        )
+                    );
+                } else {
+                    $data['hasil'] = array('status' => 'error', 'message' => 'REG service not found');
+                }
+            } else {
+                $data['hasil'] = array('status' => 'error', 'message' => 'No costs found');
+            }
+        }
+        print_r($data);
+        return $data;
     }
 }

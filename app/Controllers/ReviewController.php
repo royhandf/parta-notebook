@@ -25,8 +25,8 @@ class ReviewController extends BaseController
             ->join('products', 'products.id = reviews.product_id')
             ->join('users', 'users.id = reviews.user_id')
             ->findAll();
-        // dd($reviewcustomers);
 
+        // dd($reviewcustomers);
         $data = [
             'reviews' => $reviewcustomers,
             'title' => 'Reviews',

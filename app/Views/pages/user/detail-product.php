@@ -79,19 +79,26 @@ $offset = ($currentPage1Stars - 1) * $itemsPerPage;
                     <div class="swiper mySwiper2">
                         <div class="swiper-wrapper">
                             <?php foreach ($detailproducts->images as $image) : ?>
-                                <a href="<?= base_url('uploads/img-product/' . $image->image) ?>" data-toggle="lightbox">
-                                    <img src="<?= !empty($image) ? base_url('uploads/img-product/' . $image->image) : base_url('assets/static/images/product.png') ?>" class="card-img-top img-fluid" alt="product" />
-                                </a>
+                                <div class="swiper-slide">
+                                    <a href="<?= base_url('uploads/img-product/' . $image->image) ?>" data-lightbox="product-gallery">
+                                        <img src="<?= !empty($image) ? base_url('uploads/img-product/' . $image->image) : base_url('assets/static/images/product.png') ?>" class="card-img-top img-fluid" alt="product" />
+                                    </a>
+                                </div>
                             <?php endforeach; ?>
                         </div>
+                        <!-- Add Arrows -->
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
                     </div>
 
                     <div thumbsSlider="" class="swiper mySwiper">
                         <div class="swiper-wrapper">
                             <?php foreach ($detailproducts->images as $image) : ?>
-                                <a href="<?= base_url('uploads/img-product/' . $image->image) ?>" data-toggle="lightbox">
-                                    <img src="<?= !empty($image) ? base_url('uploads/img-product/' . $image->image) : base_url('assets/static/images/product.png') ?>" class="card-img-top img-fluid" alt="product" />
-                                </a>
+                                <div class="swiper-slide">
+                                    <a href="<?= base_url('uploads/img-product/' . $image->image) ?>" data-lightbox="product-gallery">
+                                        <img src="<?= !empty($image) ? base_url('uploads/img-product/' . $image->image) : base_url('assets/static/images/product.png') ?>" class="card-img-top img-fluid" alt="product" />
+                                    </a>
+                                </div>
                             <?php endforeach; ?>
                         </div>
                     </div>

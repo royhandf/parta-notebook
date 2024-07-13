@@ -20,12 +20,12 @@
                         <div class="mb-4">
                             <h5 class="text-black fw-medium"><?= $user->nama_lengkap ?></h5>
                             <?php if ($user->alamat) : ?>
-                                <p class="text-black"><?= $user->alamat ?></p>
+                                <p class="text-black"><?= $user->alamat ?>, <?= $city ?>, <?= $province ?>, <?= $kodepos ?></p>
                             <?php else : ?>
                                 <p class="text-black">Address not set</p>
                             <?php endif; ?>
                             <?php if ($user->no_telp) : ?>
-                                <p class="text-black"><?= $user->no_telp ?></p>
+                                <p class="text-black">+<?= $user->no_telp ?></p>
                             <?php else : ?>
                                 <p class="text-black">Phone number not set</p>
                             <?php endif; ?>
@@ -59,18 +59,21 @@
                     <div class="input-group mb-3">
                         <label class="input-group-text bg-transparent border-end-0" for="kurir"><i
                                 class="fa-solid fa-location-dot"></i></label>
-                        <select class="form-select border-start-0" id="kurir">
-                            <option value="JNE" selected>JNE</option>
+                        <select class="form-select border-start-0" id="kurir" disabled>
+                            <option value="JNE" selected>JNE Reguler</option>
                         </select>
                     </div>
+                    <p class="text-muted">Estimasi: <?= $estimasi ?> Hari</p>
                     <h5 class="fw-medium text-black mb-3">Order Summary</h5>
                     <div class="d-flex justify-content-between fw-medium">
                         <div class="d-flex flex-column text-muted">
+                            <p class="mb-4">Total Weight</p>
                             <p class="mb-2">Items</p>
                             <p class="mb-4">Shipping</p>
                             <p class="mb-2">Total</p>
                         </div>
                         <div class="d-flex flex-column text-black text-end">
+                            <p class="mb-4"><?= $totalberat ?> Kg</p>
                             <p class="mb-2">Rp. <?= number_format($subtotal, 0, ',', '.') ?></p>
                             <p class="mb-4">Rp. <?= number_format($ongkir, 0, ',', '.') ?></p>
                             <p class="mb-2">Rp. <?= number_format($total, 0, ',', '.') ?></p>

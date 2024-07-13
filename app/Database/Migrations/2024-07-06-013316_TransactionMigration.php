@@ -25,6 +25,9 @@ class TransactionMigration extends Migration
                 'type' => 'ENUM',
                 'constraint' => ['pending', 'success', 'canceled']
             ],
+            'ongkir' => [
+                'type' => 'DOUBLE',
+            ],
             'total_bayar' => [
                 'type' => 'DOUBLE',
             ],

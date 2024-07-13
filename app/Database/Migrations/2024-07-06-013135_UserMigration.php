@@ -34,6 +34,18 @@ class UserMigration extends Migration
                 'type' => 'VARCHAR',
                 'constraint'     => 255,
             ],
+            'kota_id' => [
+                'type' => 'VARCHAR',
+                'constraint'     => 32,
+            ],
+            'provinsi_id' => [
+                'type' => 'VARCHAR',
+                'constraint'     => 32,
+            ],
+            'kode_pos' => [
+                'type' => 'VARCHAR',
+                'constraint'     => 10,
+            ],
             'no_telp' => [
                 'type' => 'VARCHAR',
                 'constraint'     => 25,

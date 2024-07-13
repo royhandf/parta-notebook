@@ -46,13 +46,13 @@
                         <div class="col-md-6">
                             <h5 class="fw-medium text-muted mb-2">BILLING FROM</h5>
                             <h5 class="text-black fw-medium"><?= $admin->nama_lengkap ?></h5>
-                            <p class="text-black mb-2"><?= $admin->alamat ?></p>
+                            <p class="text-black mb-2"><?= $admin->alamat ?>, <?= $kota_admin ?>, <?= $provinsi_admin ?>, <?= $kodepos_admin ?></p>
                             <p class="text-black mb-2">+<?= $admin->no_telp ?></p>
                         </div>
                         <div class="col-md-6">
                             <h5 class="fw-medium text-muted mb-2">BILLING TO</h5>
                             <h5 class="text-black fw-medium"><?= $user->nama_lengkap ?></h5>
-                            <p class="text-black mb-2"><?= $user->alamat ?></p>
+                            <p class="text-black mb-2"><?= $user->alamat ?>, <?= $kota_user ?>, <?= $provinsi_user ?>, <?= $kodepos_user ?></p>
                             <p class="text-black mb-2">+<?= $user->no_telp ?></p>
                         </div>
                     </div>
@@ -73,6 +73,13 @@
                     </div>
                     <hr>
                     <?php } ?>
+                    <div class="mt-2">
+                        <div class="d-flex justify-content-between">
+                            <p class="text-black mb-1">Total Weight</p>
+                            <p class="text-custom-red fw-medium mb-1">
+                                <?= ($berat/1000) ?> Kg</p>
+                        </div>
+                    </div>
                     <div class="mt-2">
                         <div class="d-flex justify-content-between">
                             <p class="text-black mb-1">Shipping</p>

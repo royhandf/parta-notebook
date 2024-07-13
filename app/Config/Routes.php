@@ -31,11 +31,9 @@ $routes->get('/products', [Home::class, 'products']);
 $routes->get('/detail-product/(:segment)', [Home::class, 'detailProduct']);
 $routes->get('/productFilter', [Home::class, 'productFilters']);
 
-$routes->get('/cart', [Home::class, 'cart']);
-$routes->get('/checkout', [Home::class, 'checkout']);
-$routes->get('/payment', [Home::class, 'payment']);
-
-$routes->get('/detail-transaction', [Home::class, 'detailTransaction']);
+$routes->get('/cek-kota', [Home::class, 'responseCity']);
+$routes->get('/cek-provinsi', [Home::class, 'responseProvince']);
+$routes->get('/cek-ongkir', [Home::class, 'responseCost']);
 
 $routes->group('/', ['filter' => 'customer'], function ($routes) {
     $routes->post('add-to-cart/(:segment)', [Home::class, 'addCart']);

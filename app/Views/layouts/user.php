@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="<?= base_url('assets/extensions/sweetalert2/sweetalert2.min.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/extensions/fontawesome/css/all.min.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/extensions/swiper/swiper-bundle.min.css') ?>">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightbox-bs5@1.8.3/dist/css/lightbox.min.css" />
 </head>
 
 <body>
@@ -23,6 +25,14 @@
     <script src="<?= base_url('assets/extensions/sweetalert2/sweetalert2.min.js') ?>"></script>
     <script src="<?= base_url('assets/static/js/pages/swalfire.js') ?>"></script>
     <script src="<?= base_url('assets/extensions/swiper/swiper-bundle.min.js') ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightbox-bs5@1.8.3/dist/js/lightbox.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2();
+        });
+    </script>
 
     <script>
         $(document).on('click', '.number-spinner button', function() {
@@ -181,6 +191,36 @@
             },
         });
     </script>
+
+    <script>
+$(document).ready(function() {
+    // Initialize Swiper
+    var swiper = new Swiper('.mySwiper2', {
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
+
+    var swiperThumbs = new Swiper('.mySwiper', {
+        slidesPerView: 4,
+        freeMode: true,
+        watchSlidesVisibility: true,
+        watchSlidesProgress: true,
+    });
+
+    // Initialize Lightbox-BS5
+    lightbox.option({
+        'resizeDuration': 200,
+        'wrapAround': true
+    });
+    
+    // Prevent default action for Swiper navigation buttons
+    $('.swiper-button-next, .swiper-button-prev').on('click', function(e) {
+    e.preventDefault();
+    });
+});
+</script>
 
     <script>
         function deleteItem() {
