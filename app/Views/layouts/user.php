@@ -228,6 +228,89 @@ $(document).ready(function() {
         }
     </script>
 
+<script>
+        $(document).ready(function() {
+            const rupiahToNumeric = (rupiah) => {
+                const numericString = rupiah.replace(/[^\d]/g, '');
+                const numericValue = parseFloat(numericString);
+
+                return numericValue;
+            }
+
+            $('#collapsePrice').on('input', 'input[type="text"]', function(e) {
+                const input = $(this).val()
+                const numericValue = rupiahToNumeric(input)
+                $(this).val(`${numericValue.toLocaleString('id-ID')}`)
+                if (isNaN(numericValue)) {
+                    $(this).val('0')
+                }
+            })
+
+            $('#apply').click(function(e) {
+                e.preventDefault()
+                const base_url = `<?= base_url() ?>`
+                const url = `${base_url}product-filter`
+                const category = $('#collapseCategories input[type="radio"]:checked').val();
+                const rating = $('#collapseRating input[type="radio"]:checked').val();
+                const minimum = rupiahToNumeric($('input[name="price-minimum"]').val());
+                const maximum = rupiahToNumeric($('input[name="price-maximum"]').val());
+
+
+                if (category && rating && minimum && maximum) {
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                            category,
+                            rating,
+                            price_min: minimum,
+                            price_max: maximum
+                        },
+                        success: function(response) {
+                            const newProducts = (product) => {
+                                return `
+                                <div class="col-md-4 col-6 list-products">
+                                <a href="/detail-product/${product.id}">
+                                    <div class="card shadow">
+                                        <div class="card-content">
+                                            <img src="${product.images != null ? base_url + 'uploads/img-product/' + product.images.image : base_url + 'assets/static/images/product.png'}"
+                                                class="card-img-top p-3" alt="product" style="background: #f5f5f5" />
+                                            <div class="card-body px-3">
+                                                <p class="fw-semibold mb-2 text-truncate title-products">
+                                                ${product.nama_produk}
+                                                </p>
+                                                <div class="d-flex mb-2 align-items-center" style="font-size:10px">
+                                                    <i class="fa-solid fa-star text-warning"></i>
+                                                    <span class="text-muted ms-1" style="font-size:10px">(${product.rating})</span>
+                                                </div>
+                                                <p class="fw-semibold text-custom-red fs-custom-references mb-0">
+                                                    Rp. ${product.harga}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                                `
+                            }
+                            if (response.products.length == 0) {
+                                $('#product-body').empty();
+                            }
+                            $('.list-products').empty();
+                            response.products.forEach((product, index) => {
+                                $('#product-body').prepend(newProducts(product))
+                            })
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
 
     <?php if (session()->getFlashdata('success')) : ?>
         <script>

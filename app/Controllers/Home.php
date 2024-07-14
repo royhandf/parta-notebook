@@ -99,6 +99,48 @@ class Home extends BaseController
         return view('pages/user/products', $data);
     }
 
+    public function filterProduct()
+    {
+        $category = $this->request->getVar('category');
+        $rating = $this->request->getVar('rating');
+        $priceMin = $this->request->getVar('price_min');
+        $priceMax = $this->request->getVar('price_max');
+
+        $query = $this->products->select('products.*');
+
+        if (!empty($category)) {
+            $query = $query->where('products.category_id', $category);
+        } else {
+            $query = $query->orderBy('products.category_nama_kategori', 'ASC');
+        }
+
+        if (!empty($rating)) {
+            $query = $query->where('products.rating', $rating);
+        } else {
+            $query = $query->orderBy('products.rating', 'DESC');
+        }
+
+        if ($priceMin !== null && $priceMax !== null) {
+            $query = $query->where('products.harga >=', $priceMin)
+                ->where('products.harga <=', $priceMax);
+        } else {
+            $query = $query->orderBy('products.harga', 'ASC');
+        }
+
+        $products = $query->findAll();
+
+        foreach ($products as $key => $product) {
+            $products[$key]->images = $this->productImages->select('image')
+                ->where('product_id', $product->id)
+                ->first();
+        }
+        $data = [
+            'products' => $products,
+        ];
+
+        return response()->setJSON($data);
+    }
+
     public function detailProduct($id)
     {
         $detail = $this->products->select('products.*')

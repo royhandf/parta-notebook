@@ -29,7 +29,7 @@ $routes->post('/change-password', [Home::class, 'updatePassword']);
 $routes->get('/', [Home::class, 'index']);
 $routes->get('/products', [Home::class, 'products']);
 $routes->get('/detail-product/(:segment)', [Home::class, 'detailProduct']);
-$routes->get('/productFilter', [Home::class, 'productFilters']);
+$routes->get('/product-filter', [Home::class, 'filterProduct']);
 
 $routes->get('/cek-kota', [Home::class, 'responseCity']);
 $routes->get('/cek-provinsi', [Home::class, 'responseProvince']);
