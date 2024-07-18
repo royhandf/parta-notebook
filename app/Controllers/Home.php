@@ -423,6 +423,9 @@ class Home extends BaseController
                     if ($cost->service == "REG") {
                         $reg_service = $cost;
                         break;
+                    } else if ($cost->service == "CTCYES") {
+                        $reg_service = $cost;
+                        break;
                     }
                 }
         
@@ -576,6 +579,9 @@ class Home extends BaseController
         
                 foreach ($costs as $cost) {
                     if ($cost->service == "REG") {
+                        $reg_service = $cost;
+                        break;
+                    } else if ($cost->service == "CTCYES") {
                         $reg_service = $cost;
                         break;
                     }
